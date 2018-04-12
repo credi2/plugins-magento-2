@@ -1,5 +1,5 @@
 {
-    "name": "limesoda/cashpresso",
+    "name": "limesoda/cashpresso2",
     "description" : "Cashpresso payment provider",
     "require": {
         "php" : "~7.0.0",
