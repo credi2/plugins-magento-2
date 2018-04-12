@@ -1,0 +1,102 @@
+<?php
+
+?>
+<?php /** @var $this \Magento\Framework\View\TemplateEngine\Php  */ ?>
+<?php /** @var $block \LimeSoda\Cashpresso\Block\Frontend\Script  */ ?>
+<?php $customer = $block->getCustomer(); ?>
+
+<?php $mode = $block->getConfig()->getMode() ? 'live' : 'test'; ?>
+<script id="c2<?php echo $block->getConfig()->getWidgetType() ? '' : 'Static' ?>LabelScript" type="text/javascript"
+        src="<?php echo $block->getConfig()->getJsLabelScript() ?>"
+        defer
+        data-c2-partnerApiKey="<?php echo $block->getConfig()->getAPIKey() ?>"
+        data-c2-interestFreeDaysMerchant="<?php echo $block->getConfig()->getInterestFreeDay() ?>"
+        data-c2-mode="<?php echo $block->getConfig()->getMode() ? 'live' : 'test' ?>"
+        data-c2-locale="<?php echo $block->getLocale() ?>"
+        data-c2-email="<?php echo  $customer->getEmail() ?>"
+        data-c2-given="<?php echo  $customer->getFirstname() ?>"
+        data-c2-family="<?php echo  $customer->getLastname() ?>"
+        data-c2-birthdate="<?php echo  $customer->getDob() ?>"
+        data-c2-country="<?php echo  $customer->getCountryId() ?>"
+        data-c2-city="<?php echo  $customer->getCity() ?>"
+        data-c2-zip="<?php echo  $customer->getPostcode() ?>"
+        data-c2-addressline="<?php echo  $customer->getStreet() ?>"
+        data-c2-phone="<?php echo  $customer->getTelephone() ?>"
+        data-c2-iban="<?php echo  $customer->getTaxvat() ?>"
+        <?php if ($block->getCheckoutCallbackStatus()): ?>
+data-c2-checkoutCallback="true"
+        <?php endif; ?>
+>
+</script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function (event) {
+        "use strict";
+        if (typeof C2EcomWizard !== 'undefined') {
+            <?php if (!$block->getConfig()->getWidgetType()): // static ?>
+            C2EcomWizard.ls_template = function (C2link, price) {
+                var options = {
+                    template: '<?php echo $block->getConfig()->getTemplate() ?>',
+                    debug: '<?php echo $block->getConfig()->isDebugEnabled() && ($mode == 'test') ?>',
+                    price: typeof price !== 'undefined' ? price : 0,
+                    limit: <?php echo $block->getConfig()->getTotalLimit() ?>
+                }
+
+                var minPaybackAmount = '<?php echo $block->getConfig()->getMinPaybackAmount() ?>';
+                var paybackRate = '<?php echo $block->getConfig()->getPaybackRate() ?>';
+
+                function getDebt(price) {
+                    if (minPaybackAmount && paybackRate) {
+                        return Math.round(Math.min(price, Math.max(minPaybackAmount, price * 0.01 * paybackRate)));
+                    }
+                    return 0;
+                }
+
+                function getHtml(C2link) {
+                    if (!options.price || (options.price >= options.limit)) {
+                        C2link.style.display = "none";
+                    } else {
+                        C2link.style.display = "block";
+                    }
+
+                    var debtPrice = getDebt(options.price);
+
+                    if (options.debug) {
+                        console.log('-----');
+                        console.log('New product price: ' + price);
+                        console.log('New cashpresso price: ' + debtPrice);
+                    }
+
+                    return options.template.replace("{{price}}", debtPrice);
+                }
+
+                return getHtml(C2link);
+            }
+            <?php else: ?>
+            C2EcomWizard.ls_status = function (C2link, price) {
+                var options = {
+                    price: typeof price !== 'undefined' ? price : 0,
+                    limit: <?php echo $block->getConfig()->getTotalLimit() ?>,
+                    debug: '<?php echo $block->getConfig()->isDebugEnabled() && ($mode == 'test') ?>'
+                }
+
+                if (!options.price || (options.price >= options.limit)) {
+                    C2link.style.display = "none";
+                } else {
+                    C2link.style.display = "block";
+                }
+
+                return !options.price || (options.price >= options.limit)
+            }
+            <?php endif; ?>
+        }
+
+        require([
+            'jquery',
+        ], function($){
+            window.c2Checkout = function() {
+                $('#product_addtocart_form button[type="submit"]').trigger('click');
+            }
+        });
+    });
+</script>

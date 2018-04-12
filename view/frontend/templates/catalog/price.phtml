@@ -1,0 +1,23 @@
+<?php
+    /** @var \Magento\Framework\Pricing\SaleableInterface $product */
+    $product = $block->getProduct();
+    $finalPrice = $block->getFinalPrice();
+?>
+<?php if ($finalPrice <= $block->getConfig()->getTotalLimit()): ?>
+    <?php if ($block->getConfig()->getWidgetType()): // level integration ?>
+        <?php if ((double) $finalPrice > 0): ?>
+            <div id="c2-financing-label-<?php echo $product->getId() ?>" class="c2-financing-label" data-c2-financing-amount="<?php echo $finalPrice ?>"></div>
+        <?php endif; ?>
+    <?php else: ?>
+        <?php if ($minPayment = $block->getConfig()->getDebt($finalPrice)): ?>
+        <?php
+                $template = strpos($block->getConfig()->getTemplate(), '{{price}}') !== false ?
+                    $block->getConfig()->getTemplate() :
+                    __("or from € {{price}} / month");
+
+                $aText = preg_replace("/{{price}}/", $minPayment, $template);
+        ?>
+        <a class="c2-financing-label" id="cashpresso_product_id_<?php echo $product->getId() ?>" href="#" onclick="C2EcomWizard.startOverlayWizard(<?php echo $finalPrice ?>)"><?php echo $aText ?></a>
+        <?php endif; ?>
+    <?php endif; ?>
+<?php endif; ?>

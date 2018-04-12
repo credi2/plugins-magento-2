@@ -1,0 +1,22 @@
+{
+    "name": "limesoda/cashpresso",
+    "description" : "Cashpresso payment provider",
+    "require": {
+        "php" : "~7.0.0",
+        "magento/framework": "101.*"
+    },
+    "type": "magento2-module",
+    "version" : "1.1.8",
+    "license" : [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload" : {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "LimeSoda\\Cashpresso\\": ""
+        }
+    }
+}

@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- http://devdocs.magento.com/guides/v2.3/payments-integrations/base-integration/facade-configuration.html -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Payment Method Facade configuration -->
+    <virtualType name="CashpressoFacade" type="Magento\Payment\Model\Method\Adapter">
+        <arguments>
+            <argument name="code" xsi:type="const">LimeSoda\Cashpresso\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="formBlockType" xsi:type="string">LimeSoda\Cashpresso\Block\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">LimeSoda\Cashpresso\Block\Info</argument>
+            <argument name="infoInstance" xsi:type="string">LimeSoda\Cashpresso\Block\</argument>
+            <argument name="valueHandlerPool" xsi:type="object">cashpressoValueHandlerPool</argument>
+            <argument name="validatorPool" xsi:type="object">cashpressoValidatorPool</argument>
+            <argument name="commandPool" xsi:type="object">cashpressoCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="LimeSoda\Cashpresso\Gateway\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">LimeSoda\Cashpresso\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="pathPattern" xsi:type="const">Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Config\Model\Config">
+        <plugin name="admin_system_config_save_partner_info_plugin" type="LimeSoda\Cashpresso\Plugin\Config\PartnerInfoPlugin" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Config\Model\Config">
+        <plugin name="admin_system_config_save_currency_plugin" type="LimeSoda\Cashpresso\Plugin\Config\CurrencyPlugin" sortOrder="1"/>
+    </type>
+
+    <virtualType name="cashpressoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">cashpressoConfigValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cashpressoConfigValueHandler" type="LimeSoda\Cashpresso\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cashpressoCurrencyValidator" type="LimeSoda\Cashpresso\Gateway\Validator\CurrencyValidator">
+        <arguments>
+            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cashpressoGlobalValidator" type="LimeSoda\Cashpresso\Gateway\Validator\GlobalValidator">
+        <arguments>
+            <argument name="http" xsi:type="object">\Magento\Framework\App\Request\Http</argument>
+            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
+        </arguments>
+    </virtualType>
+
+   <!-- <virtualType name="cashpressoAvailableValidator" type="LimeSoda\Cashpresso\Gateway\Validator\AvailableValidator">
+        <arguments>
+            <argument name="http" xsi:type="object">\Magento\Framework\App\Request\Http</argument>
+            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
+            <argument name="product" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
+        </arguments>
+    </virtualType>-->
+
+    <virtualType name="cashpressoValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="currency" xsi:type="string">cashpressoCurrencyValidator</item>
+                <item name="global" xsi:type="string">cashpressoGlobalValidator</item>
+                <!--<item name="available" xsi:type="string">cashpressoAvailableValidator</item>-->
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Commands infrastructure -->
+    <virtualType name="cashpressoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="initialize" xsi:type="string">LimeSoda\Cashpresso\Gateway\Command\State</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    
+    <type name="LimeSoda\Cashpresso\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="LimeSoda\Cashpresso\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">cashpresso</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="debug" xsi:type="object">LimeSoda\Cashpresso\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
