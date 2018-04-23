@@ -96,9 +96,23 @@ class CurrencyPlugin
                                     $this->messageManager->addNoticeMessage($message);
                                 }
                             }
-                        }   
+                        }
                     }
                 }
+            }
+        }
+
+        $this->appConfig->reinit();
+
+        if ($this->csConfig->isActive(0)){
+            if (!$this->csConfig->getAPIKey()) {
+                $message = __('Cashpresso: API key is missing');
+                $this->messageManager->addWarningMessage($message);
+            }
+
+            if (!$this->csConfig->getSecretKey()) {
+                $message = __('Cashpresso: Secret key is missing');
+                $this->messageManager->addWarningMessage($message);
             }
         }
     }

@@ -35,6 +35,14 @@
         <plugin name="admin_system_config_save_currency_plugin" type="LimeSoda\Cashpresso\Plugin\Config\CurrencyPlugin" sortOrder="1"/>
     </type>
 
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="catalog_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\PricePlugin" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\GroupedProduct\Block\Product\View\Type\Grouped">
+        <plugin name="catalog_group_product_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\GroupedProduct\PricePlugin" sortOrder="1"/>
+    </type>
+
     <virtualType name="cashpressoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
@@ -103,4 +111,34 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="cashpresso_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="cashpresso_price" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\ConfigurableProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="cashpresso_price" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\GroupedProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="wishlist_configured_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\ConfiguredPrice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
 </config>

@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
+
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="product.info">
             <block class="LimeSoda\Cashpresso\Block\Frontend\Product\RedirectFlag" name="cs.redirect.checkout.field" as="form_bottom"/>
         </referenceBlock>
+
+        <referenceContainer name="product.info.main">
+            <block class="Magento\Catalog\Pricing\Render" name="cashpresso.product.price" after="product.price.tier">
+
+                <arguments>
+                    <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                    <argument name="price_type_code" xsi:type="string">cashpresso_price</argument>
+                    <argument name="zone" xsi:type="string">item_view</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
     </body>
 </page>

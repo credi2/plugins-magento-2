@@ -5,7 +5,8 @@
 **[1. Installation Instructions](#installation-instructions)**<br>
 **[2. Configuration](#configuration)**<br>
 **[3. How it works](#howto)**<br>
-**[4. Links](#links)**<br>
+**[4. FAQ](#faq)**<br>
+**[5. Links](#links)**<br>
 
 ## 1. Installation Instructions (Composer installation)
 Run the composer command in the folder where the composer.json file lies
@@ -67,9 +68,20 @@ and then run
 - on the checkout, in the payment step, customers can choose "cashpresso" as their payment method and recalculate their rates for the order.
 - after a successful purchase, customers receive a success page, where the cashpresso widget is triggered and if they are first time customers, they are asked to start a videocall with cashpresso to approve their account. If they are already registered, cashpresso approves the rate.
 - after the approvement cashpresso sends the status of the transaction to your store (success, canceled/timeout). If the status is "canceled/timeout", the order will be canceled automatically. The status "success" will assign the status "in process" to the related order.
+
+## 4. FAQ
+
+ - Why I do not see cashpresso payment method in the list?
+ 
+There could be a few reasons. First of all check total sum limitation. It should be less than the value in your cashpresso account.
+The second reason is that digital products are in the cart. It's not possible to use cashpresso for the digital products.
+
+ - Why I do not see cashpresso price around the product price?
+ 
+Check if the product less than 10 Euro or more than total sum limit in your casspresso account settings. Otherwise check if its a digital product. In these cases cashpresso price is not applied. 
   
 
-## 4. Links
+## 5. Links
  - [CashPresso API](https://test.cashpresso.com/urlreferral/api/ecommerce/v2?1)
  - [CashPresso](https://www.cashpresso.com/)
  - [Developer contacts](https://www.limesoda.com/kontakt/)

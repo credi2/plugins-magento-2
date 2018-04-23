@@ -9,35 +9,10 @@
     <referenceBlock name="render.product.prices">
         <arguments>
             <argument name="default" xsi:type="array">
-                <!--<item name="default_amount_render_template" xsi:type="string">LimeSoda_Cashpresso::product/price/amount/default.phtml</item>-->
                 <item name="prices" xsi:type="array">
-                    <item name="final_price" xsi:type="array">
-                        <item name="amount_render_class" xsi:type="string">LimeSoda\Cashpresso\Block\Pricing\Render\Amount</item>
-                        <!--<item name="amount_render_template" xsi:type="string">LimeSoda_Cashpresso::product/price/amount/default.phtml</item>-->
-                    </item>
-                </item>
-            </argument>
-
-            <argument name="configurable" xsi:type="array">
-                <item name="prices" xsi:type="array">
-                    <item name="final_price" xsi:type="array">
-                        <item name="amount_render_class" xsi:type="string">LimeSoda\Cashpresso\Block\Pricing\Render\Amount</item>
-                    </item>
-                </item>
-            </argument>
-
-            <argument name="grouped" xsi:type="array">
-                <item name="prices" xsi:type="array">
-                    <item name="final_price" xsi:type="array">
-                        <item name="amount_render_class" xsi:type="string">LimeSoda\Cashpresso\Block\Pricing\Render\Amount</item>
-                    </item>
-                </item>
-            </argument>
-
-            <argument name="bundle" xsi:type="array">
-                <item name="prices" xsi:type="array">
-                    <item name="final_price" xsi:type="array">
-                        <item name="amount_render_class" xsi:type="string">LimeSoda\Cashpresso\Block\Pricing\Render\Amount</item>
+                    <item name="cashpresso_price" xsi:type="array">
+                        <item name="render_class" xsi:type="string">LimeSoda\Cashpresso\Catalog\Pricing\Render\CSPriceBox</item>
+                        <item name="render_template" xsi:type="string">LimeSoda_Cashpresso::catalog/product/price.phtml</item>
                     </item>
                 </item>
             </argument>
