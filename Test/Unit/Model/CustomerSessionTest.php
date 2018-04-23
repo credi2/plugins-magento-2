@@ -48,8 +48,6 @@ class CustomerSessionTest extends \PHPUnit\Framework\TestCase
 
         $this->customerSessionMock->method('getCustomer')->willReturn($this->customerMock);
 
-        $this->billingAddress->
-
     }
 
     public function testGetCustomerAccountData()
