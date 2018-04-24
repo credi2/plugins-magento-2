@@ -43,6 +43,10 @@
         <plugin name="catalog_product_list_widget_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\Widget\PricePlugin" sortOrder="1"/>
     </type>
 
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+        <plugin name="catalog_widget_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\Widget\PricePlugin" sortOrder="1"/>
+    </type>
+
     <type name="Magento\GroupedProduct\Block\Product\View\Type\Grouped">
         <plugin name="catalog_group_product_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\GroupedProduct\PricePlugin" sortOrder="1"/>
     </type>
