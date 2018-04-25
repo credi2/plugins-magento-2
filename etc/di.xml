@@ -35,6 +35,14 @@
         <plugin name="admin_system_config_save_currency_plugin" type="LimeSoda\Cashpresso\Plugin\Config\CurrencyPlugin" sortOrder="1"/>
     </type>
 
+    <type name="Magento\Catalog\Block\Product\AbstractProduct">
+        <plugin name="catalog_product_item_abstract_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\AbstractProduct\PricePlugin" sortOrder="1"/>
+    </type>
+
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+        <plugin name="catalog_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\PricePlugin" sortOrder="1"/>
+    </type>
+
     <type name="Magento\Catalog\Block\Product\ListProduct">
         <plugin name="catalog_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\PricePlugin" sortOrder="1"/>
     </type>
