@@ -9,7 +9,8 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-payment-method',
-    'Magento_Ui/js/modal/alert'
+    'Magento_Ui/js/modal/alert',
+    'mage/translate'
 ], function ($, Component, quote, selectPaymentMethodAction, alert) {
     'use strict';
 
@@ -48,9 +49,8 @@ define([
         },
 
         validate: function () {
-            if (!this.getData().additional_data.cashpressoToken)
-            {
-                this.error($.mage.__("cashpresso: please fill all data."));
+            if (!this.getData().additional_data.cashpressoToken) {
+                this.error($.mage.__('cashpresso: please fill all data.'));
             }
 
             return true;

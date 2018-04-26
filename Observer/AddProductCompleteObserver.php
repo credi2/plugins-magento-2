@@ -51,9 +51,6 @@ class AddProductCompleteObserver extends AbstractDataAssignObserver
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $event->getRequest();
 
-        //$product = $event->getProduct();
-        $response = $event->getResponse();
-
         if ($this->config->showCheckoutButton() && $request->getParam('cs_redirect_to_checkout')) {
             $redirectionUrl = $this->url->getUrl($this->config->getCheckoutUrl());
             $this->responseFactory->create()->setRedirect($redirectionUrl)->sendResponse();
