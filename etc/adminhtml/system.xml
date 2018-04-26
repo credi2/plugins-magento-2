@@ -116,11 +116,6 @@
                     <label>The timeout for the order (hours)</label>
                 </field>
 
-                <field id="sign_contract_text" translate="label" type="textarea" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
-                    <label>Sign contract text</label>
-                    <comment>You can find it on success page.</comment>
-                </field>
-
                 <field id="debug_mode" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Write log</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

@@ -10,6 +10,6 @@
             <block class="LimeSoda\Cashpresso\Block\Frontend\Product\RedirectFlag" name="cs.redirect.checkout.field.1" />
         </referenceBlock>
 
-        <move element="cashpresso.product.price" destination="product.info.main" after="product.info.price" />
+        <move element="cashpresso.product.price" destination="bundle.summary" after="product.price.render.bundle.customization" />
     </body>
 </page>
