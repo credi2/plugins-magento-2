@@ -8,7 +8,6 @@
 
         <referenceContainer name="product.info.main">
             <block class="Magento\Catalog\Pricing\Render" name="cashpresso.product.price" after="product.price.tier">
-
                 <arguments>
                     <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                     <argument name="price_type_code" xsi:type="string">cashpresso_price</argument>
