@@ -111,7 +111,7 @@ class OrderStatus
             case 'TIMEOUT':
                 $orderState = $order->getState();
 
-            if ($orderState === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT || $orderState === \Magento\Sales\Model\Order::STATE_NEW) {
+                if ($orderState === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT || $orderState === \Magento\Sales\Model\Order::STATE_NEW) {
 
                     $order->cancel();
 

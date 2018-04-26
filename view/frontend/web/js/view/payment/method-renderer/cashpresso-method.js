@@ -50,7 +50,7 @@ define([
         validate: function () {
             if (!this.getData().additional_data.cashpressoToken)
             {
-                this.error($.mage.__('Cashpresso: please fill all data.'));
+                this.error($.mage.__("cashpresso: please fill all data."));
             }
 
             return true;

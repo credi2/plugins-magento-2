@@ -29,6 +29,11 @@
                     <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Information</frontend_model>
                 </field>
 
+                <field id="account" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Target account</label>
+                    <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Account</source_model>
+                </field>
+
                 <field id="mode" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Mode</label>
                     <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Mode</source_model>
@@ -108,7 +113,7 @@
                 </field>
 
                 <field id="timeout" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                    <label>The timeout for the order</label>
+                    <label>The timeout for the order (hours)</label>
                 </field>
 
                 <field id="sign_contract_text" translate="label" type="textarea" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">

@@ -27,7 +27,7 @@ class Info extends Base
             }
         }
 
-        $this->logger->error("Cashpresso getPartnerInfo error: " . $response->getMessage());
+        $this->logger->error("cashpresso getPartnerInfo error: " . $response->getMessage());
 
         return null;
     }

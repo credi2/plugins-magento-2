@@ -3,7 +3,7 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
-class   Checkout extends Base
+class Checkout extends Base
 {
     const METHOD_BUY = 'buy';
     const METHOD_SIMULATION = 'simulation/callback';
@@ -85,7 +85,7 @@ class   Checkout extends Base
     }
 
     /**
-     * @param \‌Magento\Sales\Model\Order $order
+     * @param \Magento\Sales\Model\Order $order
      * @return null
      * @throws \LimeSoda\Cashpresso\Gateway\Exception
      * @throws \Zend_Http_Client_Exception
@@ -114,7 +114,7 @@ class   Checkout extends Base
                 $respond = $this->handleRespond($respond);
 
                 if (empty($respond['purchaseId'])) {
-                    throw new \DomainException(__("Cashpresso: purchaseId is empty"));
+                    throw new \DomainException(__("cashpresso: purchaseId is empty"));
 
                     $purchaseId = null;
                 } else {
@@ -125,7 +125,7 @@ class   Checkout extends Base
             }
         }
 
-        throw new \DomainException(__("Cashpresso order request error: %s", $response->getMessage()));
+        throw new \DomainException(__("cashpresso order request error: %s", $response->getMessage()));
     }
 
     /**

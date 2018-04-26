@@ -51,7 +51,7 @@ class ConfigProvider implements ConfigProviderInterface
 
         $status = true;
 
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
             $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
 

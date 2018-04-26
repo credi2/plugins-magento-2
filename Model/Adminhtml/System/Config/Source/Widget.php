@@ -13,8 +13,8 @@ class Widget implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return [
-            ['value' => 0, 'label'=> __('Static Label integration')],
-            ['value' => 1, 'label'=> __('Product level integration')]
+            ['value' => 0, 'label'=> __('Static product label')],
+            ['value' => 1, 'label'=> __('Dynamic product label')]
         ];
     }
 }

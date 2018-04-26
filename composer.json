@@ -1,6 +1,6 @@
 {
     "name": "limesoda/cashpresso2",
-    "description" : "Cashpresso payment provider",
+    "description" : "cashpresso payment provider",
     "require": {
         "php" : "~7.0.0",
         "magento/framework": "101.*"

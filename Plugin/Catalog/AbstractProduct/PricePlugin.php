@@ -2,6 +2,8 @@
 
 namespace LimeSoda\Cashpresso\Plugin\Catalog\AbstractProduct;
 
+use Magento\Catalog\Block\Product\ProductList;
+
 class PricePlugin
 {
     /**
@@ -19,7 +21,13 @@ class PricePlugin
 
         $priceCS = '';
 
-        if ($priceRender) {
+        $useCashpressoPrice = $productType instanceof ProductList\Related ||
+            $productType instanceof ProductList\Upsell ||
+            $productType instanceof ProductList\Crosssell ||
+            $productType instanceof ProductList\Promotion ||
+            $productType instanceof ProductList\Random;
+
+        if ($useCashpressoPrice && $priceRender) {
             $priceCS = $priceRender->render(
                 'cashpresso_price',
                 $product,

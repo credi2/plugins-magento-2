@@ -25,7 +25,7 @@
                 <mode>0</mode>
                 <widget_type>1</widget_type>
                 <template>ab € {{price}} / monat</template>
-                <timeout>24</timeout>
+                <timeout>336</timeout>
                 <sign_contract_text><![CDATA[Bestellung bezahlen und Einkauf abschließen. Schließe deine Bestellung ab indem du deinen Einkauf mit cashpresso bezahlst. Durch Klick auf „Jetzt bezahlen“ öffnet sich ein Fenster und du kannst den Ratenkauf mit cashpresso abschließen. ]]></sign_contract_text>
                 <success_text><![CDATA[Vielen Dank für deinen Einkauf! Du hast die Bestellung erfolgreich abgeschlossen und deinen Einkauf mit cashpresso bezahlt.]]></success_text>
                 <checkout_button>1</checkout_button>

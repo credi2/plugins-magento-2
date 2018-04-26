@@ -106,12 +106,12 @@ class CurrencyPlugin
 
         if ($this->csConfig->isActive(0)){
             if (!$this->csConfig->getAPIKey()) {
-                $message = __('Cashpresso: API key is missing');
+                $message = __("cashpresso: API key is missing");
                 $this->messageManager->addWarningMessage($message);
             }
 
             if (!$this->csConfig->getSecretKey()) {
-                $message = __('Cashpresso: Secret key is missing');
+                $message = __("cashpresso: Secret key is missing");
                 $this->messageManager->addWarningMessage($message);
             }
         }
