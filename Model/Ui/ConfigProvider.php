@@ -77,6 +77,7 @@ class ConfigProvider implements ConfigProviderInterface
                 self::CODE => [
                     'isActive' => $this->config->isActive($storeId) && $this->isAllowed(),
                     'credit_limit' => $this->config->getTotalLimit(),
+                    'min_limit' => $this->config->getMinPaybackAmount(),
                     'api_key' => $this->config->getAPIKey(),
                     'debug' => $this->config->isDebugEnabled()
                 ]

@@ -9,7 +9,7 @@ $product = $block->getSaleableItem();
 /** @var double $finalPrice */
 $finalPrice = $block->getCsFinalPrice();
 
-if ($finalPrice <= $block->getConfig()->getTotalLimit()): ?>
+if ($finalPrice >= $block->getConfig()->getMinPaybackAmount() && $finalPrice <= $block->getConfig()->getTotalLimit()): ?>
     <?php if ($block->getConfig()->getWidgetType()): // level integration ?>
         <?php if ((double) $finalPrice > 0): ?>
             <div id="c2-financing-label-<?php echo $product->getId() ?>" class="c2-financing-label" data-c2-financing-amount="<?php echo $finalPrice ?>"></div>

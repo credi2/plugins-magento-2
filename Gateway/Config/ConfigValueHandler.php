@@ -58,6 +58,9 @@ class ConfigValueHandler implements ValueHandlerInterface
             case 'totallimit':
                 $value = $this->configInterface->getTotalLimit();
                 break;
+            case 'min_limit':
+                $value = $this->configInterface->getMinPaybackAmount();
+                break;
             case 'contractcurrency':
                 $value = $this->configInterface->getContractCurrency();
                 break;

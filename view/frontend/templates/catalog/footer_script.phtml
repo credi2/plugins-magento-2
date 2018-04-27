@@ -39,7 +39,8 @@ data-c2-checkoutCallback="true"
                     template: '<?php echo $block->getConfig()->getTemplate() ?>',
                     debug: '<?php echo $block->getConfig()->isDebugEnabled() && ($mode == 'test') ?>',
                     price: typeof price !== 'undefined' ? price : 0,
-                    limit: <?php echo $block->getConfig()->getTotalLimit() ?>
+                    limit: <?php echo $block->getConfig()->getTotalLimit() ?>,
+                    min: <?php echo $block->getConfig()->getMinPaybackAmount() ?>
                 }
 
                 var minPaybackAmount = '<?php echo $block->getConfig()->getMinPaybackAmount() ?>';
@@ -53,7 +54,7 @@ data-c2-checkoutCallback="true"
                 }
 
                 function getHtml(C2link) {
-                    if (!options.price || (options.price >= options.limit)) {
+                    if (!options.price || (options.price > options.limit) || (options.price < options.min)) {
                         C2link.style.display = "none";
                     } else {
                         C2link.style.display = "block";
@@ -77,10 +78,11 @@ data-c2-checkoutCallback="true"
                 var options = {
                     price: typeof price !== 'undefined' ? price : 0,
                     limit: <?php echo $block->getConfig()->getTotalLimit() ?>,
+                    min: <?php echo $block->getConfig()->getMinPaybackAmount() ?>,
                     debug: '<?php echo $block->getConfig()->isDebugEnabled() && ($mode == 'test') ?>'
                 }
 
-                if (!options.price || (options.price >= options.limit)) {
+                if (!options.price || (options.price > options.limit) || (options.price < options.min)) {
                     C2link.style.display = "none";
                 } else {
                     C2link.style.display = "block";
