@@ -36,6 +36,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const XML_PARTNER_INFO = 'partnerinfo';
     const XML_CASHPRESSO_PRODUCT_TYPES = 'frontend/cashpresso/product_types';
 
+    const XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT = 'interest_free_days_merchant';
+
     private $encryptor;
 
     private $date;
@@ -160,10 +162,10 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+     * @param null $storeId
      * @return bool
-     * @throws Exception
      */
-    public function getInterestFreeDay()
+    public function getInterestFreeDay($storeId = null)
     {
         if (!$this->getAPIKey()) {
             return false;
@@ -171,7 +173,11 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
         $partnerInfo = $this->getPartnerInfo();
 
-        return isset($partnerInfo['interestFreeCashpresso']) ? $partnerInfo['interestFreeCashpresso'] : false;
+        $customValue = $this->getValue(Config::XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT, $storeId);
+
+        $cashpressoValue = empty($partnerInfo['interestFreeMaxDuration']) ? 0 : $partnerInfo['interestFreeMaxDuration'];
+
+        return (int) $cashpressoValue && ($customValue > $cashpressoValue) ? $cashpressoValue : $customValue;
     }
 
     /**

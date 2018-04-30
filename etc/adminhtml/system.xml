@@ -116,6 +116,10 @@
                     <label>The timeout for the order (hours)</label>
                 </field>
 
+                <field id="interest_free_days_merchant" translate="label" type="text" sortOrder="165" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Interest Free Days Merchant</label>
+                </field>
+
                 <field id="debug_mode" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
                     <label>Write log</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
