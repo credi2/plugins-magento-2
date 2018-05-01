@@ -31,7 +31,7 @@ define([
 
                         var C2link = document.getElementById('c2-financing-label-' + this.options.productId);
 
-                        if (typeof C2link !== 'undefined') {
+                        if (C2link && typeof C2link !== 'undefined') {
                             if (cs_price > 0) {
                                 C2EcomWizard.refreshAmount('c2-financing-label-' + this.options.productId, cs_price);
                             }
