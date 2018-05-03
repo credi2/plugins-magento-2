@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info">
+            <referenceBlock name="cs.redirect.checkout.field" remove="true"/>
+        </referenceBlock>
+
+        <referenceBlock name="bundle.summary">
+            <block class="LimeSoda\Cashpresso\Block\Frontend\Product\RedirectFlag" name="cs.redirect.checkout.field.1" />
+        </referenceBlock>
+
+        <!--<referenceBlock name="cashpresso.product.price" remove="true" />-->
+
+        <move element="cashpresso.product.price" destination="bundle.summary" after="product.price.render.bundle.customization" />
+    </body>
+</page>

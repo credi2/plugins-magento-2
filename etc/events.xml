@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="payment_method_is_active">
+        <observer name="limesoda_cashpresso_payment_method_is_active" instance="LimeSoda\Cashpresso\Observer\AvailabilityObserver" />
+    </event>
+    <event name="payment_method_assign_data_cashpresso">
+        <observer name="limesoda_cashpresso_assign_token" instance="LimeSoda\Cashpresso\Observer\AssignTokenObserver" />
+    </event>
+    <event name="sales_order_place_before">
+        <observer name="limesoda_cashpresso_place_order_before" instance="LimeSoda\Cashpresso\Observer\BeforeSaveOrderObserver" />
+    </event>
+    <event name="layout_generate_blocks_after">
+        <observer name="limesoda_cashpresso_layout_generate_blocks_after" instance="LimeSoda\Cashpresso\Observer\AfterLayoutGenerateObserver" />
+    </event>
+    <event name="checkout_cart_add_product_complete">
+        <observer name="limesoda_cashpresso_checkout_cart_add_product_complete" instance="LimeSoda\Cashpresso\Observer\AddProductCompleteObserver" />
+    </event>
+</config>

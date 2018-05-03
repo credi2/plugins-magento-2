@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="LimeSoda_Cashpresso::css/cashpresso.css" />
+    </head>
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="LimeSoda\Cashpresso\Block\Frontend\Script" name="frontend-catalog-script" as="frontend.catalog.script" before="-" ifconfig="payment/cashpresso/active" template="LimeSoda_Cashpresso::catalog/footer_script.phtml">
+                <action method="setPageType">
+                    <argument name="params" xsi:type="string">product</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

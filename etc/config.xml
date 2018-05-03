@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <cashpresso>
+                <active>0</active>
+                <debug>1</debug>
+                <can_use_checkout>1</can_use_checkout>
+                <can_use_internal>0</can_use_internal>
+                <can_initialize>1</can_initialize>
+                <is_gateway>0</is_gateway>
+                <model>CashpressoFacade</model>
+                <order_status>pending</order_status>
+                <can_refund>0</can_refund>
+                <payment_action>sale</payment_action>
+                <title>Ratenkauf</title>
+                <allowspecific>0</allowspecific>
+                <status>1</status>
+                <mode>0</mode>
+                <widget_type>1</widget_type>
+                <template>ab € {{price}} / Monat</template>
+                <timeout>336</timeout>
+                <sign_contract_text><![CDATA[Schließe deine Bestellung ab indem du deinen Einkauf mit cashpresso bezahlst. Durch Klick auf „Jetzt bezahlen“ öffnet sich ein Fenster und du kannst den Ratenkauf mit cashpresso abschließen. ]]></sign_contract_text>
+                <success_text><![CDATA[Vielen Dank für deinen Einkauf! Du hast die Bestellung erfolgreich abgeschlossen und deinen Einkauf mit cashpresso bezahlt.]]></success_text>
+                <checkout_button>1</checkout_button>
+                <checkout_url>checkout</checkout_url>
+                <place_to_show>3</place_to_show>
+                <debug_mode>1</debug_mode>
+                <interest_free_days_merchant>0</interest_free_days_merchant>
+                <instructions><![CDATA[cashpresso ermöglicht dir Einkäufe in Raten zu bezahlen. Deine Ratenhöhe kannst du dir beim Kauf aussuchen und später jederzeit ändern.]]></instructions>
+                <success_button_title>Einkauf bezahlt</success_button_title>
+                <success_title>Wir haben Ihre Bestellung erhalten.</success_title>
+            </cashpresso>
+        </payment>
+    </default>
+
+    <stores>
+        <english>
+            <payment>
+                <cashpresso>
+                    <title>Financing</title>
+                    <template>from € {{price}} / month</template>
+                    <sign_contract_text><![CDATA[Pay for the order to complete the purchase. Complete your order by paying for your purchase with cashpresso. By clicking on "Pay Now" a window opens and you can complete your purchase with cashpresso.]]></sign_contract_text>
+                    <success_text><![CDATA[Thank you for your order! You have successfully completed the order and paid for your purchase with cashpresso.]]></success_text>
+                    <instructions><![CDATA[cashpresso allows you to pay for purchases in installments. You can choose your installment amount when buying and change it anytime after.]]></instructions>
+                    <success_button_title>Purchase paid</success_button_title>
+                    <success_title>Your order has been received.</success_title>
+                </cashpresso>
+            </payment>
+        </english>
+    </stores>
+</config>

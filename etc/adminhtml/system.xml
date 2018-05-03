@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="cashpresso" translate="label" type="text" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cashpresso</label>
+
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="currency_status" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Currency mismatch</label>
+                    <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Currency</frontend_model>
+                </field>
+
+                <field id="api_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>API KEY</label>
+                </field>
+
+                <field id="secret_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+
+                <field id="partnerinfo" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Information</label>
+                    <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Information</frontend_model>
+                </field>
+
+                <field id="account" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Target account</label>
+                    <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Account</source_model>
+                </field>
+
+                <field id="mode" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Mode</label>
+                    <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Mode</source_model>
+                </field>
+
+                <field id="title" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Title</label>
+                </field>
+
+                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Payment from Applicable Countries</label>
+                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment from Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+
+                <field id="instructions" translate="label" type="textarea" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Title</label>
+                </field>
+
+                <field id="status" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product label</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="widget_type" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Product label integration</label>
+                    <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Widget</source_model>
+                    <comment><![CDATA[
+                            Product level integration is recommended. Static Label Version has several disadvantages:
+                                - No returning cashpresso customer detection
+                                - No indication for successful risk check
+                                - Server side calculation of instalment pricing necessary]]]></comment>
+                    <depends>
+                        <field id="status">1</field>
+                    </depends>
+                </field>
+
+                <field id="template" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Template</label>
+                    <validate>required-entry</validate>
+                    <comment>An example: or from € {{price}} / month</comment>
+                    <depends>
+                        <field id="status">1</field>
+                        <field id="widget_type">0</field>
+                    </depends>
+                </field>
+
+                <field id="checkout_button" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Show checkout button</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment><![CDATA[Adds product and redirects to checkout page from the CS popup on product page. Works only if "system/configuration/sales/checkout/shopping cart/After Adding a Product Redirect to Shopping Cart" is NO]]></comment>
+                    <depends>
+                        <field id="status">1</field>
+                    </depends>
+                </field>
+
+                <field id="checkout_url" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                    <label>Checkout url</label>
+                    <depends>
+                        <field id="status">1</field>
+                        <field id="checkout_button">1</field>
+                    </depends>
+                </field>
+
+                <field id="place_to_show" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Place to show</label>
+                    <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Places</source_model>
+                    <comment>It works always on checkout page for any choice.</comment>
+                    <depends>
+                        <field id="status">1</field>
+                    </depends>
+                </field>
+
+                <field id="timeout" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>The timeout for the order (hours)</label>
+                </field>
+
+                <field id="interest_free_days_merchant" translate="label" type="text" sortOrder="165" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Interest Free Days Merchant</label>
+                </field>
+
+                <field id="debug_mode" translate="label" type="select" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Write log</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="sort_order" translate="label" type="text" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Sort Order</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
