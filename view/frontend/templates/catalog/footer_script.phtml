@@ -97,6 +97,7 @@ data-c2-checkoutCallback="true"
             'jquery',
         ], function($){
             window.c2Checkout = function() {
+                $('input[name="cs_redirect_to_checkout"]').val(1);
                 $('#product_addtocart_form button[type="submit"]').trigger('click');
             }
         });

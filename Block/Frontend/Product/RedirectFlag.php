@@ -28,11 +28,13 @@ class RedirectFlag extends Template
 
     protected function _toHtml()
     {
+        $urlCheckout = $this->getUrl($this->config->getCheckoutUrl());
+
         if ($this->config->showCheckoutButton()) {
             return <<<EOT
-<input type="hidden" name="cs_redirect_to_checkout" value="1" />
+<input type="hidden" name="cs_redirect_to_checkout" value="0" />
+<input type="hidden" name="cs_return_url" value="{$urlCheckout}" />
 EOT;
-
         }
 
         return '';

@@ -21,6 +21,10 @@
         <plugin name="checkout_onepage_success " type="LimeSoda\Cashpresso\Plugin\Checkout\OnepageSuccessPlugin" sortOrder="1"/>
     </type>
 
+    <type name="\Magento\Checkout\Controller\Cart\Add">
+        <plugin name="cashpresso_checkout_redirect" type="LimeSoda\Cashpresso\Plugin\Checkout\RedirectPlugin" sortOrder="1"/>
+    </type>
+
     <!--<type name="\Magento\Framework\Pricing\Render\Amount">
         <plugin name="cashpresso_price_render" type="LimeSoda\Cashpresso\Plugin\PricePlugin" sortOrder="1"/>
     </type>-->
