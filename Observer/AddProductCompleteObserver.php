@@ -16,6 +16,8 @@ class AddProductCompleteObserver extends AbstractDataAssignObserver
 
     protected $responseFactory;
 
+    protected $registry;
+
     /**
      * @var \Magento\Framework\Controller\Result\RedirectFactory
      */
@@ -23,21 +25,12 @@ class AddProductCompleteObserver extends AbstractDataAssignObserver
 
     public function __construct(
         \LimeSoda\Cashpresso\Gateway\Config $config,
-        \LimeSoda\Cashpresso\Api\Checkout $checkout,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\Controller\Result\RedirectFactory $redirectFactory,
-        \Magento\Framework\App\ResponseFactory $responseFactory
+        \Magento\Framework\Registry $registry
     )
     {
         $this->config = $config;
 
-        $this->checkout = $checkout;
-
-        $this->resultRedirectFactory = $redirectFactory;
-
-        $this->url = $url;
-
-        $this->responseFactory = $responseFactory;
+        $this->registry = $registry;
     }
 
     /**
@@ -51,11 +44,11 @@ class AddProductCompleteObserver extends AbstractDataAssignObserver
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $event->getRequest();
 
-        if ($this->config->showCheckoutButton() && $request->getParam('cs_redirect_to_checkout')) {
-            $redirectionUrl = $this->url->getUrl($this->config->getCheckoutUrl());
-            $this->responseFactory->create()->setRedirect($redirectionUrl)->sendResponse();
+        //$product = $event->getProduct();
+        //$response = $event->getResponse();
 
-            exit;
+        if ($this->config->showCheckoutButton() && $request->getParam('cs_redirect_to_checkout')==="1") {
+            $this->registry->register('cs_redirect_to_checkout', 1);
         }
 
         return;
