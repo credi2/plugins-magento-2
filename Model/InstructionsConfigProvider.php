@@ -16,7 +16,7 @@ class InstructionsConfigProvider implements ConfigProviderInterface
      * @var string[]
      */
     protected $methodCodes = [
-        UI\ConfigProvider::CODE,
+        Ui\ConfigProvider::CODE,
     ];
 
     /**
