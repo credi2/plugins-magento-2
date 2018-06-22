@@ -144,14 +144,14 @@ define([
 
             if (this.isDebug()){
                 console.log(refreshData);
+                console.log(quote.totals()['grand_total']);
             }
 
             if (window.C2EcomCheckout) {
                 window.C2EcomCheckout.refresh();
-                window.C2EcomCheckout.refreshOptionalData(refreshData);
-                console.log(quote.totals()['grand_total']);
                 $('#c2CheckoutScript').attr('data-c2-amount', quote.totals()['grand_total']);
                 window.C2EcomCheckout.init();
+                window.C2EcomCheckout.refreshOptionalData(refreshData);
                 return true;
             }
 
