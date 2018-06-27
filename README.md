@@ -15,7 +15,8 @@ Run the composer command in the folder where the composer.json file lies
 	
 or run the composer command for a specific version:
 
-    composer require limesoda/cashpresso2:v1.0.1
+    composer require limesoda/cashpresso2:v1.1.0
+
 	
 and then run 
 

@@ -126,7 +126,7 @@ class CustomerSession
         $addressData = new \Magento\Framework\DataObject();
 
         foreach ([$billingAddress, $shippingAddress] as $address) {
-            if ($address->getIsActive()) {
+            if ($address && $address->getIsActive()) {
                 $dataObject = new \Magento\Framework\DataObject();
                 $dataObject->setData([
                     'email' => $address->getEmail(),
