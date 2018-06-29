@@ -22,7 +22,7 @@
                                                                     <item name="component" xsi:type="string">LimeSoda_Cashpresso/js/view/payment/cashpresso-payments</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="cashpresso" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>
                                                                 </item>
