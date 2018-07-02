@@ -10,8 +10,9 @@ define([
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/action/select-payment-method',
     'Magento_Ui/js/modal/alert',
+    'LimeSoda_Cashpresso/js/view/payment/update-data',
     'mage/translate'
-], function ($, Component, quote, selectPaymentMethodAction, alert) {
+], function ($, Component, quote, selectPaymentMethodAction, alert, updateData) {
     'use strict';
 
 
@@ -70,92 +71,11 @@ define([
             return quote.totals()['grand_total'] < window.checkoutConfig.payment[this.item.method].credit_limit;
         },
 
-        isDebug: function () {
-            return window.checkoutConfig.payment[this.item.method].debug;
-        },
-
         /**
          * @return {Boolean}
          */
         getC2EcomCheckout: function () {
-            var refreshData = {};
-
-            var email = quote.guestEmail ? quote.guestEmail : window.checkoutConfig.customerData.email;
-
-            if (email) {
-                refreshData.email = email;
-            }
-
-            var firstname = quote.shippingAddress().firstname;
-
-            if (firstname) {
-                refreshData.given = firstname;
-            }
-
-            var lastname = quote.shippingAddress().lastname;
-
-            if (lastname) {
-                refreshData.family = lastname;
-            }
-
-            var telephone = quote.shippingAddress().telephone;
-
-            if (telephone) {
-                refreshData.phone = lastname;
-            }
-
-            var postcode = quote.shippingAddress().postcode;
-
-            if (postcode) {
-                refreshData.zip = postcode;
-            }
-
-            var city = quote.shippingAddress().city;
-
-            if (city) {
-                refreshData.city = city;
-            }
-
-            var countryId = quote.shippingAddress().countryId;
-
-            if (countryId) {
-                refreshData.country = countryId;
-            }
-
-            if (quote.shippingAddress().street instanceof Array) {
-                var address = quote.shippingAddress().street.join(', ');
-
-                if (address) {
-                    refreshData.addressline = address;
-                }
-            }
-
-            /*var dob = window.checkoutConfig.customerData.dob;
-
-            if (dob) {
-                refreshData.birthdate = dob;
-            }*/
-
-            var vatId = quote.shippingAddress().vatId;
-
-            if (vatId) {
-                refreshData.iban = vatId;
-            }
-
-            if (this.isDebug()){
-                console.log(refreshData);
-                console.log(quote.totals()['grand_total']);
-            }
-
-            if (window.C2EcomCheckout) {
-                window.C2EcomCheckout.refresh();
-                $('#c2CheckoutScript').attr('data-c2-amount', quote.totals()['grand_total']);
-                window.C2EcomCheckout.init();
-                window.C2EcomCheckout.refreshOptionalData(refreshData);
-                return true;
-            }
-
-            return false;
+            return updateData();
         }
     });
 });

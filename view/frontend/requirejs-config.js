@@ -8,5 +8,12 @@ var config = {
         '*': {
             priceBox:'LimeSoda_Cashpresso/js/price-box'
         }
+    },
+    config: {
+        mixins: {
+            'Magento_Checkout/js/view/billing-address': {
+                'LimeSoda_Cashpresso/js/view/billing-address': true
+            }
+        }
     }
 };
