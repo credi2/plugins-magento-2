@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace LimeSoda\Cashpresso\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
@@ -13,11 +12,11 @@ class GlobalValidator extends AbstractValidator
     /**
      * @var \LimeSoda\Cashpresso\Gateway\Config
      */
-    private $config;
+    protected $config;
 
-    private $http;
+    protected $http;
 
-    private $session;
+    protected $session;
 
     public function __construct(
         \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,

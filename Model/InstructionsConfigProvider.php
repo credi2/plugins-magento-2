@@ -29,7 +29,7 @@ class InstructionsConfigProvider implements ConfigProviderInterface
      */
     protected $escaper;
 
-    private $cartInterface;
+    protected $cartInterface;
 
     /**
      * InstructionsConfigProvider constructor.

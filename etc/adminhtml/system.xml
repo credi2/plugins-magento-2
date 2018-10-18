@@ -32,6 +32,7 @@
                 <field id="account" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Target account</label>
                     <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Account</source_model>
+                    <backend_model>LimeSoda\Cashpresso\Model\Config\Backend\Account</backend_model>
                 </field>
 
                 <field id="mode" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;
@@ -10,7 +9,6 @@ class AfterLayoutGenerateObserver extends AbstractDataAssignObserver
 {
 
     protected $request;
-
 
     protected $checkoutSession;
 
@@ -35,7 +33,9 @@ class AfterLayoutGenerateObserver extends AbstractDataAssignObserver
         if ($actionName == 'checkout_onepage_success') {
             $order = $this->checkoutSession->getLastRealOrder();
 
-            $purchaseId = $order->getId() && $order->getPayment() ? $order->getPayment()->getData(\Magento\Sales\Api\Data\OrderPaymentInterface::ADDITIONAL_INFORMATION . '/purchaseId') : null;
+            $purchaseId = $order->getId() && $order->getPayment() && ($order->getPayment()->getMethod() == 'cashpresso') ?
+                $order->getPayment()->getData(\Magento\Sales\Api\Data\OrderPaymentInterface::ADDITIONAL_INFORMATION . '/purchaseId') :
+                null;
 
             if ($purchaseId) {
                 /** @var \Magento\Framework\View\Layout $layout */

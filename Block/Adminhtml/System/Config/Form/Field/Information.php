@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field;
 
 use LimeSoda\Cashpresso\Gateway\Config;
@@ -33,125 +32,127 @@ class Information extends \Magento\Config\Block\System\Config\Form\Field
         $partnerInfo = $this->csConfig->getPartnerInfo();
 
         if (!empty($partnerInfo) && is_array($partnerInfo) && !empty($partnerInfo['success'])) {
-            $list = array();
+            $list = [];
 
             if (isset($partnerInfo['companyName'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Company name'),
-                    'value' => $partnerInfo['companyName']);
+                    'value' => $partnerInfo['companyName']
+                ];
             }
 
             if (isset($partnerInfo['email'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Email'),
-                    'value' => $partnerInfo['email']);
+                    'value' => $partnerInfo['email']
+                ];
             }
 
             if (isset($partnerInfo['holder'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Holder'),
                     'value' => $partnerInfo['holder']
-                );
+                ];
             }
 
             if (isset($partnerInfo['iban'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Iban'),
                     'value' => $partnerInfo['iban']
-                );
+                ];
             }
 
             if (isset($partnerInfo['interestFreeEnabled'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Interest Free Status'),
                     'value' => (bool)$partnerInfo['interestFreeEnabled']
-                );
+                ];
             }
 
             if (isset($partnerInfo['interestFreeMaxDuration'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Interest Free Max Duration'),
                     'value' => (bool)$partnerInfo['interestFreeMaxDuration']
-                );
+                ];
             }
 
             if (isset($partnerInfo['status'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Status'),
                     'value' => $partnerInfo['status']
-                );
+                ];
             }
 
             if (isset($partnerInfo['currency'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Currency'),
                     'value' => $partnerInfo['currency']
-                );
+                ];
             }
 
             if (isset($partnerInfo['minPaybackAmount'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Minimal payback amount'),
                     'value' => $partnerInfo['minPaybackAmount']
-                );
+                ];
             }
 
             if (isset($partnerInfo['paybackRate'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Payback rate'),
                     'value' => $partnerInfo['paybackRate']
-                );
+                ];
             }
 
             if (isset($partnerInfo['limit']['financing'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Financing limit'),
                     'value' => (int)$partnerInfo['limit']['financing']
-                );
+                ];
             }
 
             if (isset($partnerInfo['limit']['prepayment'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Prepayment limit'),
                     'value' => (int)$partnerInfo['limit']['prepayment']
-                );
+                ];
             }
 
             if (isset($partnerInfo['limit']['total'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Total limit'),
                     'value' => (int)$partnerInfo['limit']['total']
-                );
+                ];
             }
 
             if (isset($partnerInfo['interest']['nominal'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Interest nominal'),
                     'value' => $partnerInfo['interest']['nominal']['min']
                         . " - " . $partnerInfo['interest']['nominal']['max']
-                );
+                ];
             }
 
             if (isset($partnerInfo['interest'])) {
-                $list[] = array(
-                    'title' => __('Interest effective'),
-                    'value' => $partnerInfo['interest']['effective']['min']
-                        . " - " . $partnerInfo['interest']['effective']['max']
-                );
             }
+            $list[] = [
+                'title' => __('Interest effective'),
+                'value' => $partnerInfo['interest']['effective']['min']
+                    . " - " . $partnerInfo['interest']['effective']['max']
+            ];
 
             if (isset($partnerInfo['interestFreeCashpresso'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Interest Free cashpresso'),
                     'value' => (int)$partnerInfo['interestFreeCashpresso']
-                );
+                ];
             }
 
             if (isset($partnerInfo['last_update'])) {
-                $list[] = array(
+                $list[] = [
                     'title' => __('Last Update'),
                     'value' => $partnerInfo['last_update']
-                );
+                ];
             }
 
             foreach ($list as $item) {

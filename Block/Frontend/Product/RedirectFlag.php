@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Block\Frontend\Product;
 
 use Magento\Framework\View\Element\Template;
@@ -8,7 +7,7 @@ use LimeSoda\Cashpresso\Gateway\Config;
 
 class RedirectFlag extends Template
 {
-    private $config;
+    protected $config;
 
     /**
      * RedirectFlag constructor.

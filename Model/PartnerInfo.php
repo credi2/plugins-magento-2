@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Model;
 
 use LimeSoda\Cashpresso\Gateway\Config;
@@ -47,7 +46,7 @@ class PartnerInfo
     /**
      * @var TimezoneInterface
      */
-    private $timezone;
+    protected $timezone;
 
     public function __construct(Config $config,
                                 Info $client,

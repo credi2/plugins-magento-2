@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source;
 
 class Places implements \Magento\Framework\Option\ArrayInterface

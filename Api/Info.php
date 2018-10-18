@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Api;
 
 class Info extends Base
@@ -27,7 +26,7 @@ class Info extends Base
             }
         }
 
-        $this->logger->error("cashpresso getPartnerInfo error: " . $response->getMessage());
+        $this->logger->error('cashpresso getPartnerInfo error: ' . $response->getMessage());
 
         return null;
     }

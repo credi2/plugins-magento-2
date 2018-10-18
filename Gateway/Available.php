@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Gateway;
 
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
@@ -13,16 +12,16 @@ class Available
     const PRODUCT = 'product';
     const CATALOG = 'catalog';
 
-    private $config;
+    protected $config;
 
     /**
      * @var ValidatorPoolInterface
      */
-    private $validatorPool;
+    protected $validatorPool;
 
-    private $registry;
+    protected $registry;
 
-    private $session;
+    protected $session;
 
     public function __construct(
         Config $config,
@@ -114,7 +113,6 @@ class Available
 
         return $checkResult->getData('is_available');
     }
-
 
 
     /**

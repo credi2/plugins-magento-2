@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;

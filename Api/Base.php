@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Api;
 
 use LimeSoda\Cashpresso\Gateway\Config;
@@ -109,7 +108,7 @@ abstract class Base
     protected function handleRespond($respond)
     {
         if (empty($respond['success'])) {
-            $errors = isset($respond['errors']) ? $respond['errors'] : array($respond['error']);
+            $errors = isset($respond['errors']) ? $respond['errors'] : [$respond['error']];
 
             foreach ($errors as $error) {
                 if (!empty($error['type']) && $this->handleError($error['type'])) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Test\Unit\Model;
 
 use Magento\Store\Model\ScopeInterface;

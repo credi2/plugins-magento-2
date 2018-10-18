@@ -1,46 +1,68 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source;
 
-use LimeSoda\Cashpresso\Api\Account as AccountAPI;
+use LimeSoda\Cashpresso\Gateway\Config;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
 class Account implements \Magento\Framework\Option\ArrayInterface
 {
+    protected $accountApi;
 
-    private $accountApi;
+    protected $config;
 
-    public function __construct(AccountAPI $accountApi)
+    protected $serialize;
+
+    public function __construct(
+        Config $config,
+        Serialize $serialize)
     {
-        $this->accountApi = $accountApi;
+        $this->config = $config;
+        $this->serialize = $serialize;
     }
-
-
-    public function getTargetAccounts()
-    {
-        return $this->accountApi->getTargetAccounts();
-    }
-
 
     /**
      * @return array|void
      */
     public function toOptionArray()
     {
+
         $accounts = $this->getTargetAccounts();
 
-        $list = array();
+        $list = [];
 
         foreach ($accounts as $account) {
-            $list[] = array(
+            $list[] = [
                 'value' => $account['targetAccountId'],
                 'label' => $account['holder']
-            );
+            ];
         }
 
-        array_unshift($list, array('value' => '', 'label' => __('-- Not Selected --')));
+        array_unshift($list, ['value' => '', 'label' => __('-- Not Selected --')]);
 
         return $list;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTargetAccounts()
+    {
+        try {
+            $accounts = $this->serialize->unserialize($this->config->getTargetAccounts());
+        } catch (\Exception $e) {
+            $accounts = [];
+        }
+
+
+        $default = [
+            [
+                'targetAccountId' => Config::XML_RELOAD_FLAG,
+                'holder' => __('Update the list of target accounts')
+            ]
+        ];
+
+        return array_merge($default, $accounts);
     }
 
     /**⁄
@@ -52,13 +74,13 @@ class Account implements \Magento\Framework\Option\ArrayInterface
     {
         $accounts = $this->getTargetAccounts();
 
-        $list = array();
+        $list = [];
 
         foreach ($accounts as $account) {
             $list[$account['targetAccountId']] = $account['holder'];
         }
 
-        array_unshift($list, array('' => __('-- Not Selected --')));
+        array_unshift($list, ['' => __('-- Not Selected --')]);
 
         return $list;
     }

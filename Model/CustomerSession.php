@@ -1,13 +1,12 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Model;
 
 class CustomerSession
 {
-    private $customerSession;
+    protected $customerSession;
 
-    private $checkoutSession;
+    protected $checkoutSession;
 
     /**
      * @var Quote|null

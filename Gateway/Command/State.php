@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Gateway\Command;
 
 use Magento\Payment\Gateway\CommandInterface;

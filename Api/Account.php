@@ -18,7 +18,7 @@ class Account extends Base
 {
     const METHOD_TARGET_ACCOUNTS = 'partner/targetAccounts';
 
-    private $postData;
+    protected $postData;
 
     public function getContent()
     {
@@ -47,9 +47,7 @@ class Account extends Base
             $respond = $this->json->deserialize($response->getBody());
 
             if (is_array($respond)) {
-                $respond = $this->handleRespond($respond);
-
-                if (!empty($respond['targetAccounts'])) {
+                if (!empty($respond['success']) && !empty($respond['targetAccounts'])) {
                     return $respond['targetAccounts'];
                 }
             }
@@ -57,6 +55,6 @@ class Account extends Base
             return [];
         }
 
-        throw new \DomainException(__("cashpresso target account request error: %s", $response->getMessage()));
+        throw new \DomainException(__('cashpresso target account request error: %1', $response->getMessage()));
     }
 }

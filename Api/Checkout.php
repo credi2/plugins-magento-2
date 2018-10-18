@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Api;
 
 class Checkout extends Base
@@ -12,8 +11,8 @@ class Checkout extends Base
     const CODE_SIMULATION_CANCEL = 'CANCELLED';
     const CODE_SIMULATION_TIMEOUT = 'TIMEOUT';
 
-    private $postData;
-    private $order;
+    protected $postData;
+    protected $order;
 
     public function getContent()
     {
@@ -24,7 +23,7 @@ class Checkout extends Base
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $order->getPayment();
 
-        $data = array(
+        $data = [
             'partnerApiKey' => $this->getPartnerApiKey(),
             'c2EcomId' => $payment->getData(\Magento\Sales\Api\Data\OrderPaymentInterface::ADDITIONAL_INFORMATION . '/cashpressoToken'),
             'amount' => $price,
@@ -33,7 +32,7 @@ class Checkout extends Base
             'interestFreeDaysMerchant' => $this->getConfig()->getInterestFreeDay(),
             'language' => $this->store->getLocale(),
             'callbackUrl' => $this->urlInterface->getUrl('cashpresso/api/callback', ['_secure' => true])
-        );
+        ];
 
         if (!empty($account = $this->getConfig()->getTargetAccount())) {
             $data['targetAccountId'] = $account;
@@ -46,37 +45,37 @@ class Checkout extends Base
         }
 
         if ($address = $order->getBillingAddress()) {
-            $billingAddress = array(
-                "country" => $address->getCountryId(),
-                "zip" => $address->getPostcode(),
-                "city" => $address->getCity(),
-                "street" => implode("\n", $address->getStreet())
-            );
+            $billingAddress = [
+                'country' => $address->getCountryId(),
+                'zip' => $address->getPostcode(),
+                'city' => $address->getCity(),
+                'street' => implode("\n", $address->getStreet())
+            ];
 
             $data['invoiceAddress'] = $billingAddress;
         }
 
         if ($address = $order->getShippingAddress()) {
-            $shippingAddress = array(
-                "country" => $address->getCountryId(),
-                "zip" => $address->getPostcode(),
-                "city" => $address->getCity(),
-                "street" => implode("\n", $address->getStreet())
-            );
+            $shippingAddress = [
+                'country' => $address->getCountryId(),
+                'zip' => $address->getPostcode(),
+                'city' => $address->getCity(),
+                'street' => implode("\n", $address->getStreet())
+            ];
 
             $data['deliveryAddress'] = $shippingAddress;
         }
 
         $items = $order->getAllItems();
 
-        $cart = array();
+        $cart = [];
 
         /** @var Mage_Sales_Model_Order_Item $item */
         foreach ($items as $item) {
-            $cart[] = array(
+            $cart[] = [
                 'description' => $item->getName(),
                 'amount' => $item->getQtyOrdered()
-            );
+            ];
         }
 
         $this->postData = $data;
@@ -114,7 +113,7 @@ class Checkout extends Base
                 $respond = $this->handleRespond($respond);
 
                 if (empty($respond['purchaseId'])) {
-                    throw new \DomainException(__("cashpresso: purchaseId is empty"));
+                    throw new \DomainException(__('cashpresso: purchaseId is empty'));
 
                     $purchaseId = null;
                 } else {
@@ -125,7 +124,7 @@ class Checkout extends Base
             }
         }
 
-        throw new \DomainException(__("cashpresso order request error: %s", $response->getMessage()));
+        throw new \DomainException(__('cashpresso order request error: %1', $response->getMessage()));
     }
 
     /**

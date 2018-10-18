@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Gateway;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -32,29 +31,32 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const XML_PARTNER_DEBUG_MODE = 'debug_mode';
     const XML_PARTNER_CHECKOUT_URL = 'checkout_url';
     const XML_PARTNER_TARGET_ACCOUNT = 'account';
+    const XML_PARTNER_TARGET_ACCOUNTS = 'account_source';
 
     const XML_PARTNER_INFO = 'partnerinfo';
     const XML_CASHPRESSO_PRODUCT_TYPES = 'frontend/cashpresso/product_types';
 
     const XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT = 'interest_free_days_merchant';
 
-    private $encryptor;
+    const XML_RELOAD_FLAG = 'reload';
 
-    private $date;
+    protected $encryptor;
+
+    protected $date;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    private $state;
+    protected $state;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
-    private $httpRequest;
+    protected $httpRequest;
 
-    private $json;
+    protected $json;
 
     /**
      * LimeSoda Cashpresso config constructor
@@ -111,7 +113,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         $partnerInfo = trim($this->getValue(Config::XML_PARTNER_INFO));
 
-        return $partnerInfo ? $this->json->deserialize($partnerInfo) : array();
+        return $partnerInfo ? $this->json->deserialize($partnerInfo) : [];
     }
 
     /**
@@ -297,6 +299,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
+     * @return mixed
+     */
+    public function getTargetAccounts()
+    {
+        return $this->getValue(self::XML_PARTNER_TARGET_ACCOUNTS);
+    }
+
+    /**
      * @return null
      */
     public function getTotalLimit()
@@ -325,7 +335,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
         return empty($partnerInfo['minPaybackAmount']) ? null : $partnerInfo['minPaybackAmount'];
     }
-
 
     /**
      * @return null
@@ -410,7 +419,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $store = $this->storeManager->getStore($storeId);
         $website_id = $store->getWebsiteId();
 
-        return array($website_id, $storeId);
+        return [$website_id, $storeId];
     }
 
     /**

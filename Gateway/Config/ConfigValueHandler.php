@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Gateway\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -10,8 +9,6 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\State;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\Http;
-
-
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
@@ -29,7 +26,7 @@ class ConfigValueHandler implements ValueHandlerInterface
     /**
      * @var \LimeSoda\Cashpresso\Gateway\Config
      */
-    private $configInterface;
+    protected $configInterface;
 
     /**
      * @param \Magento\Payment\Gateway\ConfigInterface $configInterface
