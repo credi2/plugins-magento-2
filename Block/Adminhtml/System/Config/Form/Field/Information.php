@@ -134,12 +134,12 @@ class Information extends \Magento\Config\Block\System\Config\Form\Field
             }
 
             if (isset($partnerInfo['interest'])) {
+                $list[] = [
+                    'title' => __('Interest effective'),
+                    'value' => $partnerInfo['interest']['effective']['min']
+                        . " - " . $partnerInfo['interest']['effective']['max']
+                ];
             }
-            $list[] = [
-                'title' => __('Interest effective'),
-                'value' => $partnerInfo['interest']['effective']['min']
-                    . " - " . $partnerInfo['interest']['effective']['max']
-            ];
 
             if (isset($partnerInfo['interestFreeCashpresso'])) {
                 $list[] = [
