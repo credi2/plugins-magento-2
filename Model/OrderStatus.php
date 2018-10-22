@@ -6,13 +6,13 @@ class OrderStatus
 {
     protected $config;
 
-    private $logger;
+    protected $logger;
 
-    private $order;
+    protected $order;
 
-    private $transaction;
+    protected $transaction;
 
-    private $orderRepository;
+    protected $orderRepository;
 
     public function __construct(
         \LimeSoda\Cashpresso\Gateway\Config $config,
@@ -54,22 +54,22 @@ class OrderStatus
 
         if ($response = @json_decode($this->getRowBody(), true)) {
             if (!$this->hashCheck($response, $this->config->getSecretKey())){
-                throw new \Magento\Framework\Exception\LocalizedException(__("Verification hash is wrong."));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Verification hash is wrong.'));
             }
 
             if (empty($response['usage'])) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("Order ID is empty."));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Order ID is empty.'));
             }
 
             $order = $this->order->loadByIncrementId($response['usage']);
             
             if (!$order->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("Order %d was not found", $order->getId()));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Order %d was not found', $order->getId()));
             }
 
             $this->setOrderStatus($order, $response);
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__("Response is empty."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Response is empty.'));
         }
 
         return $order;
@@ -78,7 +78,7 @@ class OrderStatus
     protected function setOrderStatus( \Magento\Sales\Model\Order $order, $response)
     {
         if (empty($response['status'])){
-            throw new \Magento\Framework\Exception\LocalizedException(__("Response is empty."));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Response is empty.'));
         }
 
         switch ($response['status']) {

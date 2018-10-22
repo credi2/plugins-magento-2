@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace LimeSoda\Cashpresso\Test\Unit;
 
 class ClassConfigTest extends \PHPUnit\Framework\TestCase

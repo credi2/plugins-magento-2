@@ -32,7 +32,7 @@
     </type>
 
     <type name="Magento\Config\Model\Config">
-        <plugin name="admin_system_config_save_currency_plugin" type="LimeSoda\Cashpresso\Plugin\Config\CurrencyPlugin" sortOrder="1"/>
+        <plugin name="admin_system_config_save_plugin" type="LimeSoda\Cashpresso\Plugin\Config\SavePlugin" sortOrder="1"/>
     </type>
 
     <type name="Magento\Catalog\Block\Product\AbstractProduct">

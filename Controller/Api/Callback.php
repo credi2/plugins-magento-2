@@ -1,21 +1,20 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Controller\Api;
 
 class Callback extends \Magento\Framework\App\Action\Action
 {
-    private $logger;
+    protected $logger;
 
-    private $context;
+    protected $context;
 
-    private $orderStatus;
+    protected $orderStatus;
 
-    private $cacheTypeListInterface;
+    protected $cacheTypeListInterface;
 
-    private $resultForwardFactory;
+    protected $resultForwardFactory;
 
-    private $config;
+    protected $config;
 
     public function __construct(
         \Magento\Backend\App\Action\Context $context,

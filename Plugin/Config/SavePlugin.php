@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Plugin\Config;
 
 use Magento\Config\Model\Config;
@@ -9,33 +8,39 @@ use Magento\Config\Model\ResourceModel\Config as SystemConfig;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use LimeSoda\Cashpresso\Helper\Store;
 use Magento\Framework\App\Action\Context;
+use LimeSoda\Cashpresso\Api\Account;
+use LimeSoda\Cashpresso\Model\Ui\ConfigProvider;
+use Magento\Framework\Serialize\Serializer\Serialize;
 
-class CurrencyPlugin
+class SavePlugin
 {
-    private $csConfig;
-
     /**
      * @var \Magento\Config\Model\ResourceModel\Config
      */
     protected $resourceConfig;
-
     protected $appConfig;
-
     protected $helper;
-
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
-
     protected $context;
+    protected $csConfig;
+
+    protected $accountApi;
+
+    protected $subject;
+
+    protected $serializer;
 
     public function __construct(
         CashpressoConfig $config,
         Context $context,
         SystemConfig $resourceConfig,
         ReinitableConfigInterface $appConfig,
-        Store $storeHelper
+        Store $storeHelper,
+        Account $account,
+        Serialize $serializer
     )
     {
         $this->csConfig = $config;
@@ -49,6 +54,10 @@ class CurrencyPlugin
         $this->context = $context;
 
         $this->messageManager = $context->getMessageManager();
+
+        $this->accountApi = $account;
+
+        $this->serializer = $serializer;
     }
 
     /**
@@ -56,6 +65,19 @@ class CurrencyPlugin
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterSave(Config $subject)
+    {
+        $this->subject = $subject;
+
+        if ($this->subject->getSection() == 'payment') {
+            $this->checkCurrency();
+            $this->getTargetAccounts();
+        }
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function checkCurrency()
     {
         $cashpressoCurrency = $this->csConfig->getContractCurrency();
 
@@ -82,7 +104,7 @@ class CurrencyPlugin
 
                                 if ($this->csConfig->isActive($store->getId())) {
                                     $this->resourceConfig->saveConfig(
-                                        implode('/', ['payment', \LimeSoda\Cashpresso\Model\Ui\ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
+                                        implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                                         0,
                                         'stores',
                                         $store->getId()
@@ -104,15 +126,53 @@ class CurrencyPlugin
 
         $this->appConfig->reinit();
 
-        if ($this->csConfig->isActive(0)){
+        if ($this->csConfig->isActive(0)) {
+
+            $saveInactiveStatus = false;
+
             if (!$this->csConfig->getAPIKey()) {
-                $message = __("cashpresso: API key is missing");
+                $message = __('cashpresso: API key is missing');
                 $this->messageManager->addWarningMessage($message);
+                $saveInactiveStatus = true;
             }
 
             if (!$this->csConfig->getSecretKey()) {
-                $message = __("cashpresso: Secret key is missing");
+                $message = __('cashpresso: Secret key is missing');
                 $this->messageManager->addWarningMessage($message);
+                $saveInactiveStatus = true;
+            }
+
+            if ($saveInactiveStatus) {
+                $this->resourceConfig->saveConfig(
+                    implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
+                    0,
+                    'default',
+                    0
+                );
+                $this->appConfig->reinit();
+            }
+        }
+    }
+
+    protected function getTargetAccounts()
+    {
+        if ($this->csConfig->isActive(0) && $this->csConfig->getAPIKey() && $this->csConfig->getSecretKey()) {
+
+            $accountValue = $this->subject->getData('groups/cashpresso/fields/account');
+
+            if (isset($accountValue['value']) && $accountValue['value'] == CashpressoConfig::XML_RELOAD_FLAG) {
+                $accounts = $this->accountApi->getTargetAccounts();
+
+                if (is_array($accounts)){
+                    $this->resourceConfig->saveConfig(
+                        implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::XML_PARTNER_TARGET_ACCOUNTS]),
+                        $this->serializer->serialize($accounts),
+                        'default',
+                        0
+                    );
+
+                    $this->appConfig->reinit();
+                }
             }
         }
     }

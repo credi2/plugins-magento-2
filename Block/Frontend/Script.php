@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Block\Frontend;
 
 use Magento\Framework\View\Element\Template;
@@ -13,21 +12,21 @@ use Magento\Framework\Registry;
 
 class Script extends Template
 {
-    private $config;
+    protected $config;
 
-    private $available;
+    protected $available;
 
-    private $checkoutSession;
+    protected $checkoutSession;
 
-    private $customer;
+    protected $customer;
 
-    private $store;
+    protected $store;
 
-    private $type;
+    protected $type;
 
-    private $priceCurrency;
+    protected $priceCurrency;
 
-    private $registry;
+    protected $registry;
 
     /**
      * Script constructor.

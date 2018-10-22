@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Payment\Observer\AbstractDataAssignObserver;
@@ -44,10 +43,7 @@ class AddProductCompleteObserver extends AbstractDataAssignObserver
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $event->getRequest();
 
-        //$product = $event->getProduct();
-        //$response = $event->getResponse();
-
-        if ($this->config->showCheckoutButton() && $request->getParam('cs_redirect_to_checkout')==="1") {
+        if ($this->config->checkStatus() && $this->config->showCheckoutButton() && $request->getParam('cs_redirect_to_checkout') === '1') {
             $this->registry->register('cs_redirect_to_checkout', 1);
         }
 

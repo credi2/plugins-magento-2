@@ -14,23 +14,21 @@
 
 namespace LimeSoda\Cashpresso\Plugin\Checkout;
 
-#use Magento\Framework\App\Action\Context;
-
 class RedirectPlugin
 {
-    private $csConfig;
+    protected $csConfig;
 
-    private $checkoutSession;
+    protected $checkoutSession;
 
-    private $orderConfig;
+    protected $orderConfig;
 
-    private $httpContext;
+    protected $httpContext;
 
-    private $store;
+    protected $store;
 
-    private $registry;
+    protected $registry;
 
-    private $context;
+    protected $context;
 
     public function __construct(\LimeSoda\Cashpresso\Gateway\Config $config,
                                 \Magento\Checkout\Model\Session $checkoutSession,

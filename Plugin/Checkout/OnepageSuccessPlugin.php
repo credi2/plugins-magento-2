@@ -1,21 +1,18 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Plugin\Checkout;
-
-#use Magento\Framework\App\Action\Context;
 
 class OnepageSuccessPlugin
 {
-    private $csConfig;
+    protected $csConfig;
 
-    private $checkoutSession;
+    protected $checkoutSession;
 
-    private $orderConfig;
+    protected $orderConfig;
 
-    private $httpContext;
+    protected $httpContext;
 
-    private $store;
+    protected $store;
 
     public function __construct(\LimeSoda\Cashpresso\Gateway\Config $config,
                                 \Magento\Checkout\Model\Session $checkoutSession,
@@ -45,7 +42,7 @@ class OnepageSuccessPlugin
         $purchaseId = $order->getId() && $order->getPayment() ? $order->getPayment()->getData(\Magento\Sales\Api\Data\OrderPaymentInterface::ADDITIONAL_INFORMATION . '/purchaseId') : null;
 
         if ($block instanceof \Magento\Multishipping\Block\Checkout\Success) {
-            return "LimeSoda_Cashpresso::checkout/multishipping/success.phtml";
+            return 'LimeSoda_Cashpresso::checkout/multishipping/success.phtml';
         }
 
         if ($purchaseId && ($block->getNameInLayout() == 'checkout.success.print.button')) {
@@ -58,7 +55,7 @@ class OnepageSuccessPlugin
             $block->setData('cashpresso_config', $this->csConfig);
             $block->setData('locale', $this->store->getLocale());
 
-            return "LimeSoda_Cashpresso::checkout/success.phtml";
+            return 'LimeSoda_Cashpresso::checkout/success.phtml';
         }
 
         return $currentTemplate;

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Block;
 
 /*use Magento\Framework\Phrase;

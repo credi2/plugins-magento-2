@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Logger;
 
 use Monolog\Logger;

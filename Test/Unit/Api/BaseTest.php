@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Test\Unit\Api;
 
 use LimeSoda\Cashpresso\Gateway\Checkout;

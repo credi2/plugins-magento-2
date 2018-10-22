@@ -11,9 +11,9 @@ use Magento\Framework\Pricing\Render\RendererPool;
 
 class CSPriceBox extends FinalPriceBox
 {
-    private $available;
+    protected $available;
 
-    private $config;
+    protected $config;
 
     /**
      * CSPriceBox constructor.

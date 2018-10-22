@@ -1,11 +1,10 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Cron;
 
 class PartnerInfo
 {
-    private $partnerInfo;
+    protected $partnerInfo;
 
     public function __construct(
         \LimeSoda\Cashpresso\Model\PartnerInfo $partnerInfo

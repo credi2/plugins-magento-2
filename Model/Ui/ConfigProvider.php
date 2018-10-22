@@ -20,14 +20,14 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * @var Config
      */
-    private $config;
+    protected $config;
 
     /**
      * @var SessionManagerInterface
      */
-    private $session;
+    protected $session;
 
-    private $checkoutSession;
+    protected $checkoutSession;
 
     /**
      * Constructor

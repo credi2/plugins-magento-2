@@ -1,7 +1,6 @@
 <?php
 
 
-
 namespace LimeSoda\Cashpresso\Gateway\Validator;
 
 use Magento\Payment\Gateway\Validator\AbstractValidator;
@@ -12,7 +11,7 @@ class CurrencyValidator extends AbstractValidator
     /**
      * @var \LimeSoda\Cashpresso\Gateway\Config
      */
-    private $config;
+    protected $config;
 
     protected $storeManager;
 

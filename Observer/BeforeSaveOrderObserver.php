@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;
@@ -11,19 +10,14 @@ class BeforeSaveOrderObserver extends AbstractDataAssignObserver
 
     protected $request;
 
-    protected $paymentInterface;
-
     protected $checkout;
 
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Quote\Api\Data\PaymentInterface $paymentInterface,
         \LimeSoda\Cashpresso\Api\Checkout $checkout
     )
     {
         $this->request = $request;
-
-        $this->paymentInterface = $paymentInterface;
 
         $this->checkout = $checkout;
     }
@@ -38,8 +32,10 @@ class BeforeSaveOrderObserver extends AbstractDataAssignObserver
         $event = $observer->getEvent();
         $order = $event->getOrder();
 
-        $purchaseId = $this->checkout->sendOrder($order);
+        if ($order->getPayment()->getMethod() == 'cashpresso') {
+            $purchaseId = $this->checkout->sendOrder($order);
 
-        $order->getPayment()->setAdditionalInformation('purchaseId', $purchaseId);
+            $order->getPayment()->setAdditionalInformation('purchaseId', $purchaseId);
+        }
     }
 }

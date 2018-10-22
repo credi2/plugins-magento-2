@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source;
 
 class Mode implements \Magento\Framework\Option\ArrayInterface

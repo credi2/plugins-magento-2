@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field;
 
 use LimeSoda\Cashpresso\Gateway\Config;
@@ -28,7 +27,7 @@ class Currency extends \Magento\Config\Block\System\Config\Form\Field
 
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $text = __("cashpresso account currency (%1) does not match to store currency (%2).", $this->csConfig->getContractCurrency(), $this->storeHelper->getStoreCurrency());
+        $text = __('cashpresso account currency (%1) does not match to store currency (%2).', $this->csConfig->getContractCurrency(), $this->storeHelper->getStoreCurrency());
 
         if ($this->checkCurrency() === false) {
             return '<div id="' . $element->getHtmlId() . '">' .

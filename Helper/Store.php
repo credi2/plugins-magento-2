@@ -1,6 +1,5 @@
 <?php
 
-
 namespace LimeSoda\Cashpresso\Helper;
 
 use Magento\Framework\App\RequestInterface;
@@ -14,7 +13,7 @@ class Store
 
     protected $storeManager;
 
-    private $store;
+    protected $store;
 
     /**
      * @var \Magento\Framework\App\State
