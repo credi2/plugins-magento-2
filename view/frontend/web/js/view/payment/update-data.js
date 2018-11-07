@@ -8,8 +8,8 @@ define([
 
         var paymentMethod = quote.getPaymentMethod()();
 
-        if (paymentMethod.method != 'cashpresso') {
-            return;
+        if (paymentMethod && paymentMethod.method !== 'cashpresso') {
+            return false;
         }
 
         var refreshData = {};
