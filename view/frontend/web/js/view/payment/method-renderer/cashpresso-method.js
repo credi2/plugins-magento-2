@@ -33,7 +33,7 @@ define([
         },
 
         getCashpressoToken: function () {
-            if (typeof document.getElementById("cashpressoToken") !== 'undefined') {
+            if (document.getElementById("cashpressoToken") && typeof document.getElementById("cashpressoToken") !== 'undefined') {
                 return document.getElementById("cashpressoToken").value;
             }
 
