@@ -2,6 +2,8 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
+use LimeSoda\Cashpresso\Gateway\Config as CashpressoConfig;
+
 class Checkout extends Base
 {
     const METHOD_BUY = 'buy';
@@ -12,11 +14,31 @@ class Checkout extends Base
     const CODE_SIMULATION_TIMEOUT = 'TIMEOUT';
 
     protected $postData;
+
+    /** @var \Magento\Sales\Model\Order $order */
     protected $order;
+
+    public function setVerificationHash($data)
+    {
+        $account = $this->getConfig()->getTargetAccount();
+
+        $targetAccountId = '';
+
+        if (!empty($account) && $account != CashpressoConfig::XML_RELOAD_FLAG) {
+            $data['targetAccountId'] = $account;
+
+            if ($account != CashpressoConfig::XML_RELOAD_FLAG) {
+                $targetAccountId = $account;
+            }
+        }
+
+        $data['verificationHash'] = hash('sha512', $this->getHash($data['amount'], $this->order->getIncrementId(), $targetAccountId));
+
+        return $data;
+    }
 
     public function getContent()
     {
-        /** @var \Magento\Sales\Model\Order $order */
         $order = $this->order;
         $price = $this->priceCurrency->round($order->getGrandTotal());
 
@@ -34,11 +56,7 @@ class Checkout extends Base
             'callbackUrl' => $this->urlInterface->getUrl('cashpresso/api/callback', ['_secure' => true])
         ];
 
-        if (!empty($account = $this->getConfig()->getTargetAccount())) {
-            $data['targetAccountId'] = $account;
-        }
-
-        $data['verificationHash'] = hash('sha512', $this->getHash($price, $order->getIncrementId(), $account));
+        $data = $this->setVerificationHash($data);
 
         if ($customerID = $this->customerSession->getCustomer()->getId()) {
             $data['merchantCustomerId'] = $customerID;
@@ -84,6 +102,18 @@ class Checkout extends Base
     }
 
     /**
+     * @param $amount
+     * @param $bankUsage
+     * @param string $targetAccountId
+     * @return string
+     * @throws \LimeSoda\Cashpresso\Gateway\Exception
+     */
+    public function getHash($amount, $bankUsage, $targetAccountId = '')
+    {
+        return $this->getSecretKey() . ';' . ($amount * 100) . ';' . $this->getConfig()->getInterestFreeDay() . ';' . $bankUsage . ';' . $targetAccountId;
+    }
+
+    /**
      * @param \Magento\Sales\Model\Order $order
      * @return null
      * @throws \LimeSoda\Cashpresso\Gateway\Exception
@@ -125,17 +155,5 @@ class Checkout extends Base
         }
 
         throw new \DomainException(__('cashpresso order request error: %1', $response->getMessage()));
-    }
-
-    /**
-     * @param $amount
-     * @param $bankUsage
-     * @param string $targetAccountId
-     * @return string
-     * @throws \LimeSoda\Cashpresso\Gateway\Exception
-     */
-    public function getHash($amount, $bankUsage, $targetAccountId = '')
-    {
-        return $this->getSecretKey() . ';' . ($amount * 100) . ';' . $this->getConfig()->getInterestFreeDay() . ';' . $bankUsage . ';' . $targetAccountId;
     }
 }

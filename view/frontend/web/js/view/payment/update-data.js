@@ -1,10 +1,17 @@
 define([
     'jquery',
     'Magento_Checkout/js/model/quote'
-], function ($, quote){
+], function ($, quote) {
     'use strict';
 
     return function () {
+
+        var paymentMethod = quote.getPaymentMethod()();
+
+        if (paymentMethod && paymentMethod.method !== 'cashpresso') {
+            return false;
+        }
+
         var refreshData = {};
 
         var email = quote.guestEmail ? quote.guestEmail : window.checkoutConfig.customerData.email;
@@ -61,19 +68,11 @@ define([
             }
         }
 
-        /*var dob = window.checkoutConfig.customerData.dob;
-
-        if (dob) {
-            refreshData.birthdate = dob;
-        }*/
-
         var vatId = useShippingAddress ? quote.shippingAddress().vatId : quote.billingAddress().vatId;
 
         if (vatId) {
             refreshData.iban = vatId;
         }
-
-        var paymentMethod = quote.getPaymentMethod()();
 
         if (paymentMethod && quote.getPaymentMethod && window.checkoutConfig.payment[paymentMethod.method].debug) {
             console.log(refreshData);
