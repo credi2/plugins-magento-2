@@ -65,6 +65,8 @@ abstract class Base
 
     protected $priceCurrency;
 
+    protected $errorMessages = [];
+
     public function __construct(Config $config,
                                 Context $context,
                                 Logger $logger,
@@ -116,6 +118,7 @@ abstract class Base
                         ->addWarningMessage(
                             __($this->handleError($error['type'])) . ' - ' . $error['description']
                         );
+                    $this->errorMessages[] = $this->handleError($error['type']) . ' - ' . $error['description'];
                 }
             }
 

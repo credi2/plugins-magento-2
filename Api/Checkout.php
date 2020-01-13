@@ -3,6 +3,7 @@
 namespace LimeSoda\Cashpresso\Api;
 
 use LimeSoda\Cashpresso\Gateway\Config as CashpressoConfig;
+use Magento\Framework\Exception\LocalizedException;
 
 class Checkout extends Base
 {
@@ -143,9 +144,7 @@ class Checkout extends Base
                 $respond = $this->handleRespond($respond);
 
                 if (empty($respond['purchaseId'])) {
-                    throw new \DomainException(__('cashpresso: purchaseId is empty'));
-
-                    $purchaseId = null;
+                    throw new LocalizedException(__(implode(', ', $this->errorMessages)));
                 } else {
                     $purchaseId = $respond['purchaseId'];
                 }
