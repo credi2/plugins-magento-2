@@ -31,6 +31,10 @@
         <plugin name="admin_system_config_save_partner_info_plugin" type="LimeSoda\Cashpresso\Plugin\Config\PartnerInfoPlugin" sortOrder="1"/>
     </type>
 
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_validator_skip" type="LimeSoda\Cashpresso\Plugin\Validation\CsrfValidatorSkip" />
+    </type>
+
     <type name="Magento\Config\Model\Config">
         <plugin name="admin_system_config_save_plugin" type="LimeSoda\Cashpresso\Plugin\Config\SavePlugin" sortOrder="1"/>
     </type>
@@ -115,7 +119,7 @@
             </argument>
         </arguments>
     </virtualType>
-    
+
     <type name="LimeSoda\Cashpresso\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
