@@ -15,8 +15,11 @@ class PricePlugin
         $product
     )
     {
-        $priceRender = $list->getLayout()->getBlock('product.price.render.default')
-            ->setData('is_product_list', true);
+        if (!$priceRenderBlock = $list->getLayout()->getBlock('product.price.render.default')) {
+            return $price;
+        }
+
+        $priceRender = $priceRenderBlock ->setData('is_product_list', true);
 
         $priceCS = '';
 
