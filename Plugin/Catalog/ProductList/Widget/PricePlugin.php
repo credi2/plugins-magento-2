@@ -15,7 +15,11 @@ class PricePlugin
         $product
     )
     {
-        $priceRender = $widget->getLayout()->getBlock('product.price.render.default');
+        $priceRender = null;
+
+        if (!$priceRenderer = $widget->getLayout()->getBlock('product.price.render.default')) {
+            return $price;
+        }
 
         $priceCS = '';
 
