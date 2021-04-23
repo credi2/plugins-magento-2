@@ -183,18 +183,20 @@ abstract class Base
 
     /**
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPartnerApiKey()
     {
-        return $this->getConfig()->getAPIKey();
+        return $this->getConfig()->getAPIKey($this->store->getCurrentStoredId());
     }
 
     /**
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSecretKey()
     {
-        return $this->getConfig()->getSecretKey();
+        return $this->getConfig()->getSecretKey($this->store->getCurrentStoredId());
     }
 
     public function getUrl()

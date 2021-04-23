@@ -126,17 +126,17 @@ class SavePlugin
 
         $this->appConfig->reinit();
 
-        if ($this->csConfig->isActive(0)) {
+        if ($this->csConfig->isActive($this->helper->getCurrentStoredId())) {
 
             $saveInactiveStatus = false;
 
-            if (!$this->csConfig->getAPIKey()) {
+            if (!$this->csConfig->getAPIKey($this->helper->getCurrentStoredId())) {
                 $message = __('cashpresso: API key is missing');
                 $this->messageManager->addWarningMessage($message);
                 $saveInactiveStatus = true;
             }
 
-            if (!$this->csConfig->getSecretKey()) {
+            if (!$this->csConfig->getSecretKey($this->helper->getCurrentStoredId())) {
                 $message = __('cashpresso: Secret key is missing');
                 $this->messageManager->addWarningMessage($message);
                 $saveInactiveStatus = true;
@@ -146,8 +146,8 @@ class SavePlugin
                 $this->resourceConfig->saveConfig(
                     implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                     0,
-                    'default',
-                    0
+                    'stores',
+                    $this->helper->getCurrentStoredId()
                 );
                 $this->appConfig->reinit();
             }
@@ -156,7 +156,8 @@ class SavePlugin
 
     protected function getTargetAccounts()
     {
-        if ($this->csConfig->isActive(0) && $this->csConfig->getAPIKey() && $this->csConfig->getSecretKey()) {
+        $currentStoreId = $this->helper->getCurrentStoredId();
+        if ($this->csConfig->isActive($currentStoreId) && $this->csConfig->getAPIKey($currentStoreId) && $this->csConfig->getSecretKey($currentStoreId)) {
 
             $accountValue = $this->subject->getData('groups/cashpresso/fields/account');
 

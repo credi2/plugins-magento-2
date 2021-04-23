@@ -47,7 +47,7 @@
     <script id="c2PostCheckoutScript" type="text/javascript"
             src="<?php echo $config->getJsPostCheckoutScript() ?>"
             defer
-            data-c2-partnerApiKey="<?php echo $config->getAPIKey() ?>"
+            data-c2-partnerApiKey="<?php echo $config->getAPIKey($block->getStoreId()) ?>"
             data-c2-purchaseId="<?php echo $this->getPurchaseId() ?>"
             data-c2-mode="<?php echo $config->getMode() ? 'live' : 'test' ?>"
             data-c2-locale="<?php echo $this->getLocale() ?>"

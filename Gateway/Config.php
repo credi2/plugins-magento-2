@@ -96,22 +96,22 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return mixed
      */
-    public function getAPIKey()
+    public function getAPIKey($storeId = null)
     {
-        return trim($this->getValue(Config::XML_PARTNER_API_KEY));
+        return trim($this->getValue(Config::XML_PARTNER_API_KEY, $storeId));
     }
 
     /**
      * @return mixed
      */
-    public function getSecretKey()
+    public function getSecretKey($storeId = null)
     {
-        return $this->encryptor->decrypt($this->getValue(Config::XML_PARTNER_SECRET_KEY));
+        return $this->encryptor->decrypt($this->getValue(Config::XML_PARTNER_SECRET_KEY, $storeId));
     }
 
-    public function getPartnerInfo()
+    public function getPartnerInfo($storeId = null)
     {
-        $partnerInfo = trim($this->getValue(Config::XML_PARTNER_INFO));
+        $partnerInfo = trim($this->getValue(Config::XML_PARTNER_INFO, $storeId));
 
         return $partnerInfo ? $this->json->deserialize($partnerInfo) : [];
     }
@@ -169,7 +169,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getInterestFreeDay($storeId = null)
     {
-        if (!$this->getAPIKey()) {
+        if (!$this->getAPIKey($storeId)) {
             return false;
         }
 
@@ -279,7 +279,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function checkStatus($useStatus = true)
     {
-        return $this->isActive() && ($useStatus ? $this->getStatus() : true) && ($apiKey = $this->getAPIKey());
+        $currentStoreId = $this->storeManager->getStore()->getId();
+        return $this->isActive($currentStoreId) && ($useStatus ? $this->getStatus() : true) && ($apiKey = $this->getAPIKey($currentStoreId));
     }
 
     /**

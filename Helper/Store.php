@@ -39,7 +39,9 @@ class Store
      */
     public function getCurrentStoredId()
     {
-        return $this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML ? (int)$this->request->getParam('store', 0) : true;
+        return $this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML ?
+            (int)$this->request->getParam('store', 0) :
+            $this->storeManager->getStore()->getId();
     }
 
     /**

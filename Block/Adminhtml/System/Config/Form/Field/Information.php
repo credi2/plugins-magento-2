@@ -3,33 +3,37 @@
 namespace LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field;
 
 use LimeSoda\Cashpresso\Gateway\Config;
+use LimeSoda\Cashpresso\Helper\Store;
 
 class Information extends \Magento\Config\Block\System\Config\Form\Field
 {
     protected $csConfig;
 
     protected $request;
-    
+    protected $store;
+
     public function __construct(\Magento\Backend\Block\Template\Context $context,
                                 Config $config,
+                                Store $storeHelper,
                                 array $data = [])
     {
-        
+
         parent::__construct($context, $data);
 
         $this->csConfig = $config;
         $this->request = $context->getRequest();
+        $this->store = $storeHelper;
     }
 
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $text = '';
-        
-        if (!$this->csConfig->getAPIKey()) {
+        $currentStoreId = $this->store->getCurrentStoredId();
+        if (!$this->csConfig->getAPIKey($currentStoreId)) {
             return __('Please, enter the Partner API Key.');
         }
 
-        $partnerInfo = $this->csConfig->getPartnerInfo();
+        $partnerInfo = $this->csConfig->getPartnerInfo($currentStoreId);
 
         if (!empty($partnerInfo) && is_array($partnerInfo) && !empty($partnerInfo['success'])) {
             $list = [];

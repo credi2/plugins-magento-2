@@ -47,7 +47,7 @@ class ConfigValueHandler implements ValueHandlerInterface
     {
         switch (SubjectReader::readField($subject)){
             case 'partnerinfo':
-                $value = $this->configInterface->getPartnerInfo();
+                $value = $this->configInterface->getPartnerInfo($storeId);
                 break;
             case 'interestfreeday':
                 $value = $this->configInterface->getInterestFreeDay();

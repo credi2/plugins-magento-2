@@ -15,16 +15,16 @@
                     <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Currency</frontend_model>
                 </field>
 
-                <field id="api_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="api_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>API KEY</label>
                 </field>
 
-                <field id="secret_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="secret_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Secret Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
 
-                <field id="partnerinfo" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="partnerinfo" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Information</label>
                     <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Information</frontend_model>
                 </field>

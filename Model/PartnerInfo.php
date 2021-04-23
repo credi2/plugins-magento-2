@@ -4,6 +4,7 @@ namespace LimeSoda\Cashpresso\Model;
 
 use LimeSoda\Cashpresso\Gateway\Config;
 use LimeSoda\Cashpresso\Api\Info;
+use LimeSoda\Cashpresso\Helper\Store;
 use LimeSoda\Cashpresso\Model\Ui\ConfigProvider;
 use Magento\Config\Model\ResourceModel\Config as SystemConfig;
 use Magento\Framework\DataObject;
@@ -48,13 +49,16 @@ class PartnerInfo
      */
     protected $timezone;
 
+    protected $store;
+
     public function __construct(Config $config,
                                 Info $client,
                                 SystemConfig $resourceConfig,
                                 DataObject $dataObject,
                                 Factory $configFactory,
                                 ReinitableConfigInterface $appConfig,
-                                Timezone $timezone
+                                Timezone $timezone,
+                                Store $storeHelper
     ) {
         $this->csConfig = $config;
 
@@ -69,6 +73,8 @@ class PartnerInfo
         $this->appConfig = $appConfig;
 
         $this->timezone = $timezone;
+
+        $this->store = $storeHelper;
     }
 
     public function generatePartnerInfo()
@@ -86,8 +92,8 @@ class PartnerInfo
             $this->resourceConfig->saveConfig(
                 'payment/' . ConfigProvider::CODE . '/partnerinfo',
                 $this->dataObject->toJson(),
-                'default',
-                0
+                'stores',
+                $this->store->getCurrentStoredId()
             );
 
             $this->appConfig->reinit();
