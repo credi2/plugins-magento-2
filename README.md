@@ -9,13 +9,17 @@
 **[5. Links](#links)**<br>
 
 ## 1. Installation Instructions (Composer installation)
-Run the composer command in the folder where the composer.json file lies
+Add Github repository to composer config
+
+	composer config repositories.cashpresso vcs https://github.com/credi2/plugins-magento-2
+
+then run the composer command in the folder where the composer.json file lies
 
 	composer require limesoda/cashpresso2:dev-master
 	
 or run the composer command for a specific version:
 
-    composer require limesoda/cashpresso2:v1.1.6
+    composer require limesoda/cashpresso2:v1.1.11
 
 	
 and then run 
@@ -85,4 +89,4 @@ Check if the product less than 10 Euro or more than total sum limit in your cass
 ## 5. Links
  - [CashPresso API](https://test.cashpresso.com/urlreferral/api/ecommerce/v2?1)
  - [CashPresso](https://www.cashpresso.com/)
- - [Developer contacts](https://www.limesoda.com/kontakt/)
+ - [Developer contacts](https://www.kawa-commerce.com/kontakt/)
