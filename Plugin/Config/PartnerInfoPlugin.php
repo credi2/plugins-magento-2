@@ -5,10 +5,11 @@ namespace LimeSoda\Cashpresso\Plugin\Config;
 use LimeSoda\Cashpresso\Gateway\Config;
 use LimeSoda\Cashpresso\Helper\Store;
 use LimeSoda\Cashpresso\Model\PartnerInfo;
-use Magento\Store\Model\StoreManagerInterface;
 
 class PartnerInfoPlugin
 {
+    const DATA_PATH_PARTNERINFO = 'groups/cashpresso/fields/partnerinfo/inherit';
+
     protected $csConfig;
 
     protected $partnerInfo;
@@ -29,8 +30,15 @@ class PartnerInfoPlugin
         \Magento\Config\Model\Config $subject
     )
     {
-        if ($subject->getSection() == 'payment' && $this->csConfig->getAPIKey($this->store->getCurrentStoredId())) {
-            $this->partnerInfo->generatePartnerInfo();
+        if ($subject->getSection() == 'payment' && $this->csConfig->getAPIKey()) {
+            $scope = $subject->getScope();
+            $scopeId = $subject->getScopeId();
+            $partnerInfoInherit = $subject->getDataByPath(self::DATA_PATH_PARTNERINFO);
+            if($partnerInfoInherit){
+                $this->partnerInfo->removePartnerInfo($scopeId, $scope);
+            }else{
+                $this->partnerInfo->generatePartnerInfo($scopeId, $scope);
+            }
         }
     }
 }

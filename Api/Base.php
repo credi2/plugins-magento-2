@@ -187,7 +187,7 @@ abstract class Base
      */
     public function getPartnerApiKey()
     {
-        return $this->getConfig()->getAPIKey($this->store->getCurrentStoredId());
+        return $this->getConfig()->getAPIKey();
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class Base
      */
     public function getSecretKey()
     {
-        return $this->getConfig()->getSecretKey($this->store->getCurrentStoredId());
+        return $this->getConfig()->getSecretKey();
     }
 
     public function getUrl()

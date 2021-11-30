@@ -28,12 +28,11 @@ class Information extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $text = '';
-        $currentStoreId = $this->store->getCurrentStoredId();
-        if (!$this->csConfig->getAPIKey($currentStoreId)) {
+        if (!$this->csConfig->getAPIKey()) {
             return __('Please, enter the Partner API Key.');
         }
 
-        $partnerInfo = $this->csConfig->getPartnerInfo($currentStoreId);
+        $partnerInfo = $this->csConfig->getPartnerInfo();
 
         if (!empty($partnerInfo) && is_array($partnerInfo) && !empty($partnerInfo['success'])) {
             $list = [];

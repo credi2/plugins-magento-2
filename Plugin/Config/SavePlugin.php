@@ -80,6 +80,8 @@ class SavePlugin
     protected function checkCurrency()
     {
         $cashpressoCurrency = $this->csConfig->getContractCurrency();
+        $scope = $this->subject->getScope();
+        $scopeId = $this->subject->getScopeId();
 
         if ($cashpressoCurrency) {
             $currentStoreId = $this->helper->getCurrentStoredId();
@@ -102,7 +104,7 @@ class SavePlugin
 
                             if ($cashpressoCurrency != $currency) {
 
-                                if ($this->csConfig->isActive($store->getId())) {
+                                if ($this->csConfig->isActive()) {
                                     $this->resourceConfig->saveConfig(
                                         implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                                         0,
@@ -126,17 +128,17 @@ class SavePlugin
 
         $this->appConfig->reinit();
 
-        if ($this->csConfig->isActive($this->helper->getCurrentStoredId())) {
+        if ($this->csConfig->isActive()) {
 
             $saveInactiveStatus = false;
 
-            if (!$this->csConfig->getAPIKey($this->helper->getCurrentStoredId())) {
+            if (!$this->csConfig->getAPIKey()) {
                 $message = __('cashpresso: API key is missing');
                 $this->messageManager->addWarningMessage($message);
                 $saveInactiveStatus = true;
             }
 
-            if (!$this->csConfig->getSecretKey($this->helper->getCurrentStoredId())) {
+            if (!$this->csConfig->getSecretKey()) {
                 $message = __('cashpresso: Secret key is missing');
                 $this->messageManager->addWarningMessage($message);
                 $saveInactiveStatus = true;
@@ -146,8 +148,8 @@ class SavePlugin
                 $this->resourceConfig->saveConfig(
                     implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                     0,
-                    'stores',
-                    $this->helper->getCurrentStoredId()
+                    $scope,
+                    $scopeId
                 );
                 $this->appConfig->reinit();
             }
@@ -156,20 +158,20 @@ class SavePlugin
 
     protected function getTargetAccounts()
     {
-        $currentStoreId = $this->helper->getCurrentStoredId();
-        if ($this->csConfig->isActive($currentStoreId) && $this->csConfig->getAPIKey($currentStoreId) && $this->csConfig->getSecretKey($currentStoreId)) {
-
+        if ($this->csConfig->isActive() && $this->csConfig->getAPIKey() && $this->csConfig->getSecretKey()) {
+            $scope = $this->subject->getScope();
+            $scopeId = $this->subject->getScopeId();
             $accountValue = $this->subject->getData('groups/cashpresso/fields/account');
 
             if (isset($accountValue['value']) && $accountValue['value'] == CashpressoConfig::XML_RELOAD_FLAG) {
                 $accounts = $this->accountApi->getTargetAccounts();
 
-                if (is_array($accounts)){
+                if (is_array($accounts) && count($accounts)){
                     $this->resourceConfig->saveConfig(
                         implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::XML_PARTNER_TARGET_ACCOUNTS]),
                         $this->serializer->serialize($accounts),
-                        'default',
-                        0
+                        $scope,
+                        $scopeId
                     );
 
                     $this->appConfig->reinit();

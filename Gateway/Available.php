@@ -98,8 +98,7 @@ class Available
 
     public function isAvailable($type = null)
     {
-        $currentStoreId = $this->store->getCurrentStoredId();
-        if (!$this->config->isActive($currentStoreId) || !$this->config->getAPIKey($currentStoreId) || !$this->config->getSecretKey($currentStoreId)) {
+        if (!$this->config->isActive() || !$this->config->getAPIKey() || !$this->config->getSecretKey()) {
             return false;
         }
 
