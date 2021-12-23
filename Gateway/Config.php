@@ -73,13 +73,14 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
-     * @param null $methodCode
-     * @param string $pathPattern
      * @param Json|null $json
      * @param DateTime $date
      * @param State $state
      * @param Http $httpRequest
      * @param StoreManagerInterface $storeManager
+     * @param GroupRepositoryInterface $groupRepository
+     * @param null $methodCode
+     * @param string $pathPattern
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
