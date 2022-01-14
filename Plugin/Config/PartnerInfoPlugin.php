@@ -3,20 +3,27 @@
 namespace LimeSoda\Cashpresso\Plugin\Config;
 
 use LimeSoda\Cashpresso\Gateway\Config;
+use LimeSoda\Cashpresso\Helper\Store;
 use LimeSoda\Cashpresso\Model\PartnerInfo;
 
 class PartnerInfoPlugin
 {
+    const DATA_PATH_PARTNERINFO = 'groups/cashpresso/fields/partnerinfo/inherit';
+
     protected $csConfig;
 
     protected $partnerInfo;
 
+    protected $store;
+
     public function __construct(Config $config,
-                                PartnerInfo $partnerInfo
+                                PartnerInfo $partnerInfo,
+                                Store $storeHelper
     )
     {
         $this->csConfig = $config;
         $this->partnerInfo = $partnerInfo;
+        $this->store = $storeHelper;
     }
 
     public function afterSave(
@@ -24,7 +31,14 @@ class PartnerInfoPlugin
     )
     {
         if ($subject->getSection() == 'payment' && $this->csConfig->getAPIKey()) {
-            $this->partnerInfo->generatePartnerInfo();
+            $scope = $subject->getScope();
+            $scopeId = $subject->getScopeId();
+            $partnerInfoInherit = $subject->getDataByPath(self::DATA_PATH_PARTNERINFO);
+            if($partnerInfoInherit){
+                $this->partnerInfo->removePartnerInfo($scopeId, $scope);
+            }else{
+                $this->partnerInfo->generatePartnerInfo($scopeId, $scope);
+            }
         }
     }
 }

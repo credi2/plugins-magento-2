@@ -7,6 +7,8 @@ use Magento\Framework\Webapi\Rest\Request\Deserializer\Json;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\App\State;
+use Magento\Store\Api\GroupRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Request\Http;
 
@@ -14,8 +16,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const KEY_ACTIVE = 'active';
 
-    const XML_PARTNER_API_KEY = 'api_key';
-    const XML_PARTNER_SECRET_KEY = 'secret_key';
+    const XML_PARTNER_API_KEY = 'payment/cashpresso/api_key';
+    const XML_PARTNER_SECRET_KEY = 'payment/cashpresso/secret_key';
 
     const XML_PARTNER_STATUS = 'status';
     const XML_PARTNER_MODE = 'mode';
@@ -33,7 +35,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const XML_PARTNER_TARGET_ACCOUNT = 'account';
     const XML_PARTNER_TARGET_ACCOUNTS = 'account_source';
 
-    const XML_PARTNER_INFO = 'partnerinfo';
+    const XML_PARTNER_INFO = 'payment/cashpresso/partnerinfo';
     const XML_CASHPRESSO_PRODUCT_TYPES = 'frontend/cashpresso/product_types';
 
     const XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT = 'interest_free_days_merchant';
@@ -58,29 +60,39 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     protected $json;
 
+    private $groupRepository;
+
+    private $scope = ScopeInterface::SCOPE_STORES;
+
+    private $scopeConfig;
+
+    private $storeId;
+
     /**
      * LimeSoda Cashpresso config constructor
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
-     * @param null $methodCode
-     * @param string $pathPattern
      * @param Json|null $json
      * @param DateTime $date
      * @param State $state
      * @param Http $httpRequest
      * @param StoreManagerInterface $storeManager
+     * @param GroupRepositoryInterface $groupRepository
+     * @param null $methodCode
+     * @param string $pathPattern
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         EncryptorInterface $encryptor,
-        $methodCode = null,
-        $pathPattern = self::DEFAULT_PATH_PATTERN,
         Json $json,
         DateTime $date,
         State $state,
         Http $httpRequest,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        GroupRepositoryInterface $groupRepository,
+        $methodCode = null,
+        $pathPattern = self::DEFAULT_PATH_PATTERN
     )
     {
 
@@ -90,7 +102,45 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->storeManager = $storeManager;
         $this->httpRequest = $httpRequest;
         $this->json = $json;
+        $this->groupRepository = $groupRepository;
+        $this->scopeConfig = $scopeConfig;
+        $this->storeId = $this->setScopeAndStoreId();
         parent::__construct($scopeConfig, $methodCode);
+    }
+
+    /**
+     * @return int
+     */
+    private function setScopeAndStoreId()
+    {
+        if($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML){
+            $storeId = (int) $this->httpRequest->getParam('store', 0);
+            $websiteId = (int) $this->httpRequest->getParam('website', 0);
+            if ($storeId === 0 && $websiteId > 0) {
+                try {
+                    $groupId = $this->storeManager->getWebsite($websiteId)->getDefaultGroupId();
+                    $group = $this->groupRepository->get($groupId);
+                    $this->scope = ScopeInterface::SCOPE_WEBSITES;
+                    return $group->getDefaultStoreId();
+                } catch (\Exception $e) {
+                    return 0;
+                }
+            }else if($storeId === 0 && $websiteId === 0){
+                $this->scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+            }
+        }else {
+            $storeId = $this->storeManager->getStore()->getId();
+        }
+
+        return $storeId;
+    }
+
+    private function getScope(){
+        return $this->scope;
+    }
+
+    private function getStoreId(){
+        return $this->storeId;
     }
 
     /**
@@ -98,7 +148,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAPIKey()
     {
-        return trim($this->getValue(Config::XML_PARTNER_API_KEY));
+        return trim($this->scopeConfig->getValue(Config::XML_PARTNER_API_KEY, $this->getScope(), $this->getStoreId()));
     }
 
     /**
@@ -106,12 +156,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getSecretKey()
     {
-        return $this->encryptor->decrypt($this->getValue(Config::XML_PARTNER_SECRET_KEY));
+        return $this->encryptor->decrypt($this->scopeConfig->getValue(Config::XML_PARTNER_SECRET_KEY, $this->getScope(), $this->getStoreId()));
     }
 
     public function getPartnerInfo()
     {
-        $partnerInfo = trim($this->getValue(Config::XML_PARTNER_INFO));
+        $partnerInfo = trim($this->scopeConfig->getValue(Config::XML_PARTNER_INFO, $this->getScope(), $this->getStoreId()));
 
         return $partnerInfo ? $this->json->deserialize($partnerInfo) : [];
     }
@@ -120,9 +170,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return int
      */
-    public function getStatus($storeId = null)
+    public function getStatus()
     {
-        return (int)$this->getValue(Config::XML_PARTNER_STATUS, $storeId);
+        return (int)$this->getValue(Config::XML_PARTNER_STATUS, $this->getStoreId());
     }
 
     public function getConvertTime($date, $hrs)
@@ -136,9 +186,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getTimeout($storeId = null)
+    public function getTimeout()
     {
-        $hrs = (int)$this->getValue(Config::XML_PARTNER_TIMEOUT, $storeId);
+        $hrs = (int)$this->getValue(Config::XML_PARTNER_TIMEOUT, $this->getStoreId());
 
         return $this->getConvertTime($this->date->timestamp(), $hrs);
     }
@@ -148,9 +198,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getMode($storeId = null)
+    public function getMode()
     {
-        return (int)$this->getValue(Config::XML_PARTNER_MODE, $storeId);
+        return (int)$this->getValue(Config::XML_PARTNER_MODE, $this->getStoreId());
     }
 
     /**
@@ -158,16 +208,16 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getWidgetType($storeId = null)
+    public function getWidgetType()
     {
-        return (int)$this->getValue(Config::XML_PARTNER_WIDGET_TYPE, $storeId);
+        return (int)$this->getValue(Config::XML_PARTNER_WIDGET_TYPE, $this->getStoreId());
     }
 
     /**
      * @param null $storeId
      * @return bool
      */
-    public function getInterestFreeDay($storeId = null)
+    public function getInterestFreeDay()
     {
         if (!$this->getAPIKey()) {
             return false;
@@ -175,7 +225,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
         $partnerInfo = $this->getPartnerInfo();
 
-        $customValue = $this->getValue(Config::XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT, $storeId);
+        $customValue = $this->getValue(Config::XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT, $this->getStoreId());
 
         $cashpressoValue = empty($partnerInfo['interestFreeMaxDuration']) ? 0 : $partnerInfo['interestFreeMaxDuration'];
 
@@ -187,9 +237,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getTemplate($storeId = null)
+    public function getTemplate()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_TEMPLATE, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_TEMPLATE, $this->getStoreId());
     }
 
     /**
@@ -197,9 +247,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getContractText($storeId = null)
+    public function getContractText()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_CONTRACT_TEXT, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_CONTRACT_TEXT, $this->getStoreId());
     }
 
     /**
@@ -207,9 +257,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getSuccessText($storeId = null)
+    public function getSuccessText()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_TEXT, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_TEXT, $this->getStoreId());
     }
 
     /**
@@ -217,9 +267,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getSuccessButtonTitle($storeId = null)
+    public function getSuccessButtonTitle()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_BUTTON_TITLE, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_BUTTON_TITLE, $this->getStoreId());
     }
 
     /**
@@ -227,9 +277,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getSuccessTitle($storeId = null)
+    public function getSuccessTitle()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_TITLE, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_SUCCESS_TITLE, $this->getStoreId());
     }
 
     /**
@@ -237,9 +287,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getPlaceToShow($storeId = null)
+    public function getPlaceToShow()
     {
-        return (int)$this->getValue(Config::XML_PARTNER_PLACE_TO_SHOW, $storeId);
+        return (int)$this->getValue(Config::XML_PARTNER_PLACE_TO_SHOW, $this->getStoreId());
     }
 
     /**
@@ -247,9 +297,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function showCheckoutButton($storeId = null)
+    public function showCheckoutButton()
     {
-        return (int)$this->getValue(Config::XML_PARTNER_CHECKOUT_BUTTON, $storeId);
+        return (int)$this->getValue(Config::XML_PARTNER_CHECKOUT_BUTTON, $this->getStoreId());
     }
 
     /**
@@ -257,9 +307,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param null $storeId
      * @return mixed
      */
-    public function getCheckoutUrl($storeId = null)
+    public function getCheckoutUrl()
     {
-        return (string)$this->getValue(Config::XML_PARTNER_CHECKOUT_URL, $storeId);
+        return (string)$this->getValue(Config::XML_PARTNER_CHECKOUT_URL, $this->getStoreId());
     }
 
     /**
@@ -268,9 +318,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return bool
      */
-    public function isActive($storeId = null)
+    public function isActive()
     {
-        return (bool)$this->getValue(self::KEY_ACTIVE, $storeId);
+        return (bool)$this->getValue(self::KEY_ACTIVE, $this->getStoreId());
     }
 
     /**
@@ -279,23 +329,23 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function checkStatus($useStatus = true)
     {
-        return $this->isActive() && ($useStatus ? $this->getStatus() : true) && ($apiKey = $this->getAPIKey());
+        return $this->isActive() && (!$useStatus || $this->getStatus()) && ($this->getAPIKey());
     }
 
     /**
      * @return mixed
      */
-    public function isDebugEnabled($storeId = null)
+    public function isDebugEnabled()
     {
-        return (bool)$this->getValue(self::XML_PARTNER_DEBUG_MODE, $storeId);
+        return (bool)$this->getValue(self::XML_PARTNER_DEBUG_MODE, $this->getStoreId());
     }
 
     /**
      * @return mixed
      */
-    public function getTargetAccount($storeId = null)
+    public function getTargetAccount()
     {
-        return $this->getValue(self::XML_PARTNER_TARGET_ACCOUNT, $storeId);
+        return $this->getValue(self::XML_PARTNER_TARGET_ACCOUNT, $this->getStoreId());
     }
 
     /**

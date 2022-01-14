@@ -2,6 +2,7 @@
 
 namespace LimeSoda\Cashpresso\Gateway;
 
+use LimeSoda\Cashpresso\Helper\Store;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Framework\Registry;
 use Magento\Checkout\Model\Session;
@@ -23,10 +24,13 @@ class Available
 
     protected $session;
 
+    protected $store;
+
     public function __construct(
         Config $config,
         Registry $registry,
         Session $session,
+        Store $storeHelper,
         ValidatorPoolInterface $validatorPool = null
     )
     {
@@ -37,6 +41,8 @@ class Available
         $this->config = $config;
 
         $this->session = $session;
+
+        $this->store = $storeHelper;
     }
 
     /**
