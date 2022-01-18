@@ -80,6 +80,8 @@ class SavePlugin
     protected function checkCurrency()
     {
         $cashpressoCurrency = $this->csConfig->getContractCurrency();
+        $scope = $this->subject->getScope();
+        $scopeId = $this->subject->getScopeId();
 
         if ($cashpressoCurrency) {
             $currentStoreId = $this->helper->getCurrentStoredId();
@@ -102,7 +104,7 @@ class SavePlugin
 
                             if ($cashpressoCurrency != $currency) {
 
-                                if ($this->csConfig->isActive($store->getId())) {
+                                if ($this->csConfig->isActive()) {
                                     $this->resourceConfig->saveConfig(
                                         implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                                         0,
@@ -126,7 +128,7 @@ class SavePlugin
 
         $this->appConfig->reinit();
 
-        if ($this->csConfig->isActive(0)) {
+        if ($this->csConfig->isActive()) {
 
             $saveInactiveStatus = false;
 
@@ -146,8 +148,8 @@ class SavePlugin
                 $this->resourceConfig->saveConfig(
                     implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::KEY_ACTIVE]),
                     0,
-                    'default',
-                    0
+                    $scope,
+                    $scopeId
                 );
                 $this->appConfig->reinit();
             }
@@ -156,19 +158,20 @@ class SavePlugin
 
     protected function getTargetAccounts()
     {
-        if ($this->csConfig->isActive(0) && $this->csConfig->getAPIKey() && $this->csConfig->getSecretKey()) {
-
+        if ($this->csConfig->isActive() && $this->csConfig->getAPIKey() && $this->csConfig->getSecretKey()) {
+            $scope = $this->subject->getScope();
+            $scopeId = $this->subject->getScopeId();
             $accountValue = $this->subject->getData('groups/cashpresso/fields/account');
 
             if (isset($accountValue['value']) && $accountValue['value'] == CashpressoConfig::XML_RELOAD_FLAG) {
                 $accounts = $this->accountApi->getTargetAccounts();
 
-                if (is_array($accounts)){
+                if (is_array($accounts) && count($accounts)){
                     $this->resourceConfig->saveConfig(
                         implode('/', ['payment', ConfigProvider::CODE, CashpressoConfig::XML_PARTNER_TARGET_ACCOUNTS]),
                         $this->serializer->serialize($accounts),
-                        'default',
-                        0
+                        $scope,
+                        $scopeId
                     );
 
                     $this->appConfig->reinit();

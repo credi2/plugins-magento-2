@@ -183,6 +183,7 @@ abstract class Base
 
     /**
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPartnerApiKey()
     {
@@ -191,6 +192,7 @@ abstract class Base
 
     /**
      * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSecretKey()
     {

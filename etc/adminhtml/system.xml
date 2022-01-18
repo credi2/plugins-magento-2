@@ -15,16 +15,16 @@
                     <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Currency</frontend_model>
                 </field>
 
-                <field id="api_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="api_key" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>API KEY</label>
                 </field>
 
-                <field id="secret_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="secret_key" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Secret Key</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
 
-                <field id="partnerinfo" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="partnerinfo" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Information</label>
                     <frontend_model>LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field\Information</frontend_model>
                 </field>
@@ -35,7 +35,7 @@
                     <backend_model>LimeSoda\Cashpresso\Model\Config\Backend\Account</backend_model>
                 </field>
 
-                <field id="mode" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="mode" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Mode</label>
                     <source_model>LimeSoda\Cashpresso\Model\Adminhtml\System\Config\Source\Mode</source_model>
                 </field>
@@ -126,7 +126,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
-                <field id="sort_order" translate="label" type="text" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="sort_order" translate="label" type="text" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Sort Order</label>
                 </field>
             </group>
