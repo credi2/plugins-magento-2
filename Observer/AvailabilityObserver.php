@@ -13,7 +13,7 @@ class AvailabilityObserver extends AbstractDataAssignObserver
      */
     public function getGrandTotal()
     {
-        return $this->checkoutSession->getQuote()->getGrandTotal();
+        return $this->checkoutSession->getQuote()->getBaseGrandTotal();
     }
 
     /**
@@ -35,7 +35,7 @@ class AvailabilityObserver extends AbstractDataAssignObserver
             }
 
             $totalLimit = $methodInstance->getConfigData('totallimit');
-            $quoteTotalLimit = $quote->getGrandTotal();
+            $quoteTotalLimit = $quote->getBaseGrandTotal();
             $shippingMethod = $quote->getShippingAddress()->getShippingMethod();
 
             /** @var \Magento\Framework\DataObject $result */

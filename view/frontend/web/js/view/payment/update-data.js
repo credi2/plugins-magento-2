@@ -76,12 +76,12 @@ define([
 
         if (paymentMethod && quote.getPaymentMethod && window.checkoutConfig.payment[paymentMethod.method].debug) {
             console.log(refreshData);
-            console.log(quote.totals()['grand_total']);
+            console.log(quote.totals()['base_grand_total']);
         }
 
         if (window.C2EcomCheckout) {
             window.C2EcomCheckout.refresh();
-            $('#c2CheckoutScript').attr('data-c2-amount', quote.totals()['grand_total']);
+            $('#c2CheckoutScript').attr('data-c2-amount', quote.totals()['base_grand_total']);
             window.C2EcomCheckout.init();
             window.C2EcomCheckout.refreshOptionalData(refreshData);
             return true;
