@@ -25,6 +25,12 @@ or run the composer command for a specific version:
 and then run 
 
     composer update
+    
+and then run
+	
+	bin/magento module:enable LimeSoda_Cashpresso
+
+	bin/magento setup:upgrade
 
 ## 2.Configuration
 
