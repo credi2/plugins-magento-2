@@ -398,7 +398,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     protected function _getDomain()
     {
-        return 'https://' . ($this->getMode() ? 'my.cashpresso.com' : 'test.cashpresso.com/frontend') . '/';
+        return 'https://' . ($this->getMode() ? 'my.cashpresso.com' : 'my.test-cashpresso.com') . '/';
     }
 
     /**
