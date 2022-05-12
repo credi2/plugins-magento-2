@@ -91,6 +91,6 @@ Check if the product less than 10 Euro or more than total sum limit in your cass
   
 
 ## 5. Links
- - [CashPresso API](https://test.cashpresso.com/urlreferral/api/ecommerce/v2?1)
+ - [CashPresso API](https://partner.test-cashpresso.com/#/api)
  - [CashPresso](https://www.cashpresso.com/)
  - [Developer contacts](https://www.kawa-commerce.com/kontakt/)
