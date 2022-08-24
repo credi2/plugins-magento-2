@@ -45,7 +45,7 @@ class OnepageSuccessPlugin
             return 'LimeSoda_Cashpresso::checkout/multishipping/success.phtml';
         }
 
-        if ($purchaseId && ($block->getNameInLayout() == 'checkout.success.print.button')) {
+        if ($purchaseId && $block->getNameInLayout() === 'checkout.success.print.button') {
             $block->setData('can_print_order', false);
             return $currentTemplate;
         }

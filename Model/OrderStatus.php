@@ -62,7 +62,7 @@ class OrderStatus
             }
 
             $order = $this->order->loadByIncrementId($response['usage']);
-            
+
             if (!$order->getId()) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Order %d was not found', $order->getId()));
             }
@@ -84,7 +84,7 @@ class OrderStatus
         switch ($response['status']) {
             case 'SUCCESS':
                 $orderState = $order->getState();
-                
+
                 if ($orderState === \Magento\Sales\Model\Order::STATE_NEW) {
                     if ($order->canInvoice()) {
                         /** @var \Magento\Sales\Model\Order\Invoice $invoice */
@@ -130,7 +130,7 @@ class OrderStatus
      */
     public function hashCheck($response, $key)
     {
-        $remoteHash = isset($response['verificationHash']) ? $response['verificationHash'] : '';
+        $remoteHash = $response['verificationHash']??'';
         $status = $response['status']??'';
         $referenceId = $response['referenceId']??'';
         $usage = $response['usage']??'';
@@ -144,7 +144,7 @@ class OrderStatus
     {
         $rawRequestBody = file_get_contents('php://input');
 
-        if (strlen(trim($rawRequestBody)) > 0) {
+        if (is_string($rawRequestBody) && strlen(trim($rawRequestBody)) > 0) {
             $rawRequestBody = $rawRequestBody;
         } else {
             $rawRequestBody = false;

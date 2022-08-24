@@ -15,10 +15,8 @@ use Magento\Framework\App\Request\Http;
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
     const KEY_ACTIVE = 'active';
-
     const XML_PARTNER_API_KEY = 'payment/cashpresso/api_key';
     const XML_PARTNER_SECRET_KEY = 'payment/cashpresso/secret_key';
-
     const XML_PARTNER_STATUS = 'status';
     const XML_PARTNER_MODE = 'mode';
     const XML_PARTNER_WIDGET_TYPE = 'widget_type';
@@ -34,39 +32,36 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const XML_PARTNER_CHECKOUT_URL = 'checkout_url';
     const XML_PARTNER_TARGET_ACCOUNT = 'account';
     const XML_PARTNER_TARGET_ACCOUNTS = 'account_source';
-
     const XML_PARTNER_INFO = 'payment/cashpresso/partnerinfo';
     const XML_CASHPRESSO_PRODUCT_TYPES = 'frontend/cashpresso/product_types';
-
     const XML_PARTNER_INTEREST_FREE_DAYS_MERCHANT = 'interest_free_days_merchant';
-
     const XML_RELOAD_FLAG = 'reload';
 
-    protected $encryptor;
+    protected EncryptorInterface $encryptor;
 
-    protected $date;
+    protected DateTime $date;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    protected $state;
+    protected State $state;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
 
-    protected $httpRequest;
+    protected Http $httpRequest;
 
-    protected $json;
+    protected Json $json;
 
-    private $groupRepository;
+    private GroupRepositoryInterface $groupRepository;
 
     private $scope = ScopeInterface::SCOPE_STORES;
 
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
-    private $storeId;
+    private int $storeId;
 
     /**
      * LimeSoda Cashpresso config constructor
@@ -93,9 +88,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         GroupRepositoryInterface $groupRepository,
         $methodCode = null,
         $pathPattern = self::DEFAULT_PATH_PATTERN
-    )
-    {
-
+    ) {
         $this->encryptor = $encryptor;
         $this->date = $date;
         $this->state = $state;
@@ -104,7 +97,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         $this->json = $json;
         $this->groupRepository = $groupRepository;
         $this->scopeConfig = $scopeConfig;
-        $this->storeId = $this->setScopeAndStoreId();
+        $this->storeId = (int) $this->setScopeAndStoreId();
         parent::__construct($scopeConfig, $methodCode);
     }
 
@@ -148,7 +141,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getAPIKey()
     {
-        return trim($this->scopeConfig->getValue(Config::XML_PARTNER_API_KEY, $this->getScope(), $this->getStoreId()));
+        $value = $this->scopeConfig->getValue(Config::XML_PARTNER_API_KEY, $this->getScope(), $this->getStoreId());
+        return is_string($value) ? trim($value) : null;
     }
 
     /**
@@ -161,8 +155,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     public function getPartnerInfo()
     {
-        $partnerInfo = trim($this->scopeConfig->getValue(Config::XML_PARTNER_INFO, $this->getScope(), $this->getStoreId()));
-
+        $value = $this->scopeConfig->getValue(Config::XML_PARTNER_INFO, $this->getScope(), $this->getStoreId());
+        $partnerInfo = is_string($value) ? trim($value) : null;
         return $partnerInfo ? $this->json->deserialize($partnerInfo) : [];
     }
 
@@ -318,7 +312,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param int|null $storeId
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return (bool)$this->getValue(self::KEY_ACTIVE, $this->getStoreId());
     }
@@ -327,7 +321,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      * @param bool $useStatus
      * @return bool
      */
-    public function checkStatus($useStatus = true)
+    public function checkStatus($useStatus = true): bool
     {
         return $this->isActive() && (!$useStatus || $this->getStatus()) && ($this->getAPIKey());
     }
@@ -335,7 +329,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return mixed
      */
-    public function isDebugEnabled()
+    public function isDebugEnabled(): bool
     {
         return (bool)$this->getValue(self::XML_PARTNER_DEBUG_MODE, $this->getStoreId());
     }
@@ -416,7 +410,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return string
      */
-    public function getJsCheckoutScript()
+    public function getJsCheckoutScript(): string
     {
         $jsSrc = $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_checkout.all.min.js';
 
@@ -426,7 +420,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return string
      */
-    public function getJsPostCheckoutScript()
+    public function getJsPostCheckoutScript(): string
     {
         $jsSrc = $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_post_checkout.all.min.js';
 

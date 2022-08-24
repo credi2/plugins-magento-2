@@ -9,9 +9,9 @@ class Account implements \Magento\Framework\Option\ArrayInterface
 {
     protected $accountApi;
 
-    protected $config;
+    protected Config $config;
 
-    protected $serialize;
+    protected Serialize $serialize;
 
     public function __construct(
         Config $config,
@@ -70,7 +70,7 @@ class Account implements \Magento\Framework\Option\ArrayInterface
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $accounts = $this->getTargetAccounts();
 

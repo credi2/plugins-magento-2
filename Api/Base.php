@@ -93,7 +93,7 @@ abstract class Base
         $this->messageManager = $context->getMessageManager();
     }
 
-    abstract function getContent();
+    abstract function getContent(): array;
 
     /**
      * @return Config
@@ -110,7 +110,7 @@ abstract class Base
     protected function handleRespond($respond)
     {
         if (empty($respond['success'])) {
-            $errors = isset($respond['errors']) ? $respond['errors'] : [$respond['error']];
+            $errors = $respond['errors'] ?? [$respond['error']];
 
             foreach ($errors as $error) {
                 if (!empty($error['type']) && $this->handleError($error['type'])) {

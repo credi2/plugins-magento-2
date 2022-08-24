@@ -17,9 +17,9 @@ use LimeSoda\Cashpresso\Gateway\Config;
 
 class Account extends \Magento\Framework\App\Config\Value
 {
-    protected $appConfig;
-    protected $csConfig;
-    protected $accountApi;
+    protected ReinitableConfigInterface $appConfig;
+    protected Config $csConfig;
+    protected ApiAccount $accountApi;
 
     /**
      * @param Context $context

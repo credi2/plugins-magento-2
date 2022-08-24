@@ -25,12 +25,9 @@ class Checkout extends Base
 
         $targetAccountId = '';
 
-        if (!empty($account) && $account != CashpressoConfig::XML_RELOAD_FLAG) {
+        if (!empty($account) && $account !== CashpressoConfig::XML_RELOAD_FLAG) {
             $data['targetAccountId'] = $account;
-
-            if ($account != CashpressoConfig::XML_RELOAD_FLAG) {
-                $targetAccountId = $account;
-            }
+            $targetAccountId = $account;
         }
 
         $data['verificationHash'] = hash('sha512', $this->getHash($data['amount'], $this->order->getIncrementId(), $targetAccountId));
@@ -38,7 +35,7 @@ class Checkout extends Base
         return $data;
     }
 
-    public function getContent()
+    public function getContent(): array
     {
         $order = $this->order;
         $price = $this->priceCurrency->round($order->getGrandTotal());
@@ -85,18 +82,6 @@ class Checkout extends Base
             $data['deliveryAddress'] = $shippingAddress;
         }
 
-        $items = $order->getAllItems();
-
-        $cart = [];
-
-        /** @var Mage_Sales_Model_Order_Item $item */
-        foreach ($items as $item) {
-            $cart[] = [
-                'description' => $item->getName(),
-                'amount' => $item->getQtyOrdered()
-            ];
-        }
-
         $this->postData = $data;
 
         return $data;
@@ -109,7 +94,7 @@ class Checkout extends Base
      * @return string
      * @throws \LimeSoda\Cashpresso\Gateway\Exception
      */
-    public function getHash($amount, $bankUsage, $targetAccountId = '')
+    public function getHash($amount, $bankUsage, $targetAccountId = ''): string
     {
         return $this->getSecretKey() . ';' . ($amount * 100) . ';' . $this->getConfig()->getInterestFreeDay() . ';' . $bankUsage . ';' . $targetAccountId;
     }

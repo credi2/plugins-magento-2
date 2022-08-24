@@ -34,7 +34,7 @@ class Info extends Base
     /**
      * @return array
      */
-    public function getContent()
+    public function getContent(): array
     {
         return ['partnerApiKey' => $this->getPartnerApiKey()];
     }

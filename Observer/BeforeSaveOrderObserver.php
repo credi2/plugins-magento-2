@@ -8,9 +8,9 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 class BeforeSaveOrderObserver extends AbstractDataAssignObserver
 {
 
-    protected $request;
+    protected RequestInterface $request;
 
-    protected $checkout;
+    protected Checkout $checkout;
 
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -18,7 +18,6 @@ class BeforeSaveOrderObserver extends AbstractDataAssignObserver
     )
     {
         $this->request = $request;
-
         $this->checkout = $checkout;
     }
 
@@ -32,9 +31,8 @@ class BeforeSaveOrderObserver extends AbstractDataAssignObserver
         $event = $observer->getEvent();
         $order = $event->getOrder();
 
-        if ($order->getPayment()->getMethod() == 'cashpresso') {
+        if ($order->getPayment()->getMethod() === 'cashpresso') {
             $purchaseId = $this->checkout->sendOrder($order);
-
             $order->getPayment()->setAdditionalInformation('purchaseId', $purchaseId);
         }
     }

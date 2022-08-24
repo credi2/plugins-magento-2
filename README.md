@@ -78,7 +78,7 @@ and then run
 
  - Why I do not see cashpresso payment method in the list?
  
-There could be a few reasons. First of all check total sum limitation. It should be less than the value in your cashpresso account.
+There could be a few reasons. First check total sum limitation. It should be less than the value in your cashpresso account.
 The second reason is that digital products are in the cart. It's not possible to use cashpresso for the digital products.
 
  - Why I do not see cashpresso price around the product price?

@@ -55,12 +55,11 @@ class AvailabilityObserver extends AbstractDataAssignObserver
 
         $status = true;
 
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         if ($items) {
             foreach ($items as $item) {
-                $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-                if (!$status){
+                if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true)){
+                    $status = false;
                     break;
                 }
             }
