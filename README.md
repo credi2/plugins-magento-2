@@ -35,9 +35,6 @@ and then run
     
    By default the cashpresso Payment Module is not activated. You need to get an API key and Secret Key, which you can find in your cashpresso account.
    Fill the fields API KEY and Secret Key in the magento settings and save your settings. (You can fill other settings also, but don't activate the payment method "Cahspresso" until you have not saved your API Key and Secret Key).
-   Now you should receive the information of the settings in your cashpresso account:
-   
-   ![Step 1](configuration.png)
    
    The option ```Target account``` will be available only, if target accounts exists in your cashpresso account. 
     
@@ -87,6 +84,5 @@ Check if the product less than 10 Euro or more than total sum limit in your cass
   
 
 ## 5. Links
- - [CashPresso API](https://test.cashpresso.com/urlreferral/api/ecommerce/v2?1)
  - [CashPresso](https://www.cashpresso.com/)
  - [Developer contacts](https://www.kawa-commerce.com/kontakt/)
