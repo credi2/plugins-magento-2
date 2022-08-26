@@ -12,9 +12,9 @@ use Magento\Framework\Registry;
 
 class Script extends Template
 {
-    protected Config $config;
+    protected Gateway\Config $config;
 
-    protected Available $available;
+    protected Gateway\Available $available;
 
     protected Session $checkoutSession;
 
