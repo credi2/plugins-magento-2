@@ -4,21 +4,21 @@ namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Framework\App\RequestInterface;
+use Magento\Checkout\Model\Session;
 
 class AfterLayoutGenerateObserver extends AbstractDataAssignObserver
 {
 
-    protected $request;
+    protected RequestInterface $request;
 
-    protected $checkoutSession;
+    protected Session $checkoutSession;
 
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Checkout\Model\Session $checkoutSession
-    )
-    {
+        RequestInterface $request,
+        Session $checkoutSession
+    ) {
         $this->request = $request;
-
         $this->checkoutSession = $checkoutSession;
     }
 
