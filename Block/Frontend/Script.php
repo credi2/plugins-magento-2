@@ -73,7 +73,7 @@ class Script extends Template
      */
     public function getGrandTotal()
     {
-        return $this->priceCurrency->round($this->checkoutSession->getQuote()->getGrandTotal());
+        return $this->priceCurrency->round($this->checkoutSession->getQuote()->getBaseGrandTotal());
     }
 
     /**
