@@ -30,7 +30,7 @@ abstract class Base
     const CP_ERROR_INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR';
     const CP_ERROR_DUPLICATE_CUSTOMER = 'DUPLICATE_CUSTOMER';
 
-    const TEST_URL = 'https://test.cashpresso.com/rest/backend/ecommerce/v2/';
+    const TEST_URL = 'https://backend.test-cashpresso.com/rest/backend/ecommerce/v2/';
     const LIVE_URL = 'https://backend.cashpresso.com/rest/backend/ecommerce/v2/';
 
     /**
