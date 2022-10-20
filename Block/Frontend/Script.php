@@ -22,7 +22,7 @@ class Script extends Template
 
     protected Store $store;
 
-    protected mixed $type;
+    protected $type;
 
     protected PriceCurrencyInterface $priceCurrency;
 
