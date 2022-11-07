@@ -37,7 +37,7 @@ define([
         var telephone = useShippingAddress ? quote.shippingAddress().telephone : quote.billingAddress().telephone;
 
         if (telephone) {
-            refreshData.phone = lastname;
+            refreshData.phone = telephone;
         }
 
         var postcode = useShippingAddress ? quote.shippingAddress().postcode : quote.billingAddress().postcode;
