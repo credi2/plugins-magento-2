@@ -25,6 +25,12 @@ or run the composer command for a specific version:
 and then run 
 
     composer update
+    
+and then run
+	
+	bin/magento module:enable LimeSoda_Cashpresso
+
+	bin/magento setup:upgrade
 
 ## 2.Configuration
 
@@ -34,8 +40,9 @@ and then run
     ```Magento Admin Menu / Stores / Settings-Configuration / Sales / Payment methods / Cashpresso```
     
    By default the cashpresso Payment Module is not activated. You need to get an API key and Secret Key, which you can find in your cashpresso account.
-   Fill the fields API KEY and Secret Key in the magento settings and save your settings. (You can fill other settings also, but don't activate the payment method "Cahspresso" until you have not saved your API Key and Secret Key).
-   
+   Fill the fields API KEY and Secret Key in the magento settings and save your settings. (You can fill other settings also, but don't activate the payment method "Cashpresso" until you have saved your API Key and Secret Key).
+   Now you should receive the information of the settings in your cashpresso account:
+      
    The option ```Target account``` will be available only, if target accounts exists in your cashpresso account. 
     
 3. Options table 
