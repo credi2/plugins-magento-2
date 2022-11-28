@@ -13,7 +13,7 @@ class AvailabilityObserver extends AbstractDataAssignObserver
      */
     public function getGrandTotal()
     {
-        return $this->checkoutSession->getQuote()->getGrandTotal();
+        return $this->checkoutSession->getQuote()->getBaseGrandTotal();
     }
 
     /**
@@ -35,7 +35,7 @@ class AvailabilityObserver extends AbstractDataAssignObserver
             }
 
             $totalLimit = $methodInstance->getConfigData('totallimit');
-            $quoteTotalLimit = $quote->getGrandTotal();
+            $quoteTotalLimit = $quote->getBaseGrandTotal();
             $shippingMethod = $quote->getShippingAddress()->getShippingMethod();
 
             /** @var \Magento\Framework\DataObject $result */
@@ -55,12 +55,11 @@ class AvailabilityObserver extends AbstractDataAssignObserver
 
         $status = true;
 
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         if ($items) {
             foreach ($items as $item) {
-                $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-                if (!$status){
+                if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true)){
+                    $status = false;
                     break;
                 }
             }

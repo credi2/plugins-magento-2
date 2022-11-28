@@ -4,13 +4,13 @@ namespace LimeSoda\Cashpresso\Block\Adminhtml\System\Config\Form\Field;
 
 use LimeSoda\Cashpresso\Gateway\Config;
 use LimeSoda\Cashpresso\Helper\Store;
+use \Magento\Framework\App\RequestInterface;
 
 class Information extends \Magento\Config\Block\System\Config\Form\Field
 {
-    protected $csConfig;
-
-    protected $request;
-    protected $store;
+    protected Config $csConfig;
+    protected RequestInterface $request;
+    protected Store $store;
 
     public function __construct(\Magento\Backend\Block\Template\Context $context,
                                 Config $config,

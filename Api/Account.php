@@ -14,13 +14,15 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
+use PHPUnit\Exception;
+
 class Account extends Base
 {
     const METHOD_TARGET_ACCOUNTS = 'partner/targetAccounts';
 
     protected $postData;
 
-    public function getContent()
+    public function getContent(): array
     {
         $data = [
             'partnerApiKey' => $this->getPartnerApiKey(),

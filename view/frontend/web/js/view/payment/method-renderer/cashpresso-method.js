@@ -68,7 +68,7 @@ define([
 
         /** Returns is method available */
         isAvailable: function () {
-            return quote.totals()['grand_total'] < window.checkoutConfig.payment[this.item.method].credit_limit;
+            return quote.totals()['base_grand_total'] < window.checkoutConfig.payment[this.item.method].credit_limit;
         },
 
         /**

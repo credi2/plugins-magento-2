@@ -6,45 +6,41 @@ namespace LimeSoda\Cashpresso\Gateway\Validator;
 use Magento\Payment\Gateway\Validator\AbstractValidator;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Request\Http;
 
 class GlobalValidator extends AbstractValidator
 {
     /**
      * @var \LimeSoda\Cashpresso\Gateway\Config
      */
-    protected $config;
+    protected ConfigInterface $config;
 
-    protected $http;
+    protected Http $http;
 
-    protected $session;
+    protected Session $session;
 
     public function __construct(
         \Magento\Payment\Gateway\Validator\ResultInterfaceFactory $resultFactory,
-        \Magento\Framework\App\Request\Http $http,
+        Http $http,
         Session $session,
         ConfigInterface $config
-    )
-    {
+    ) {
         $this->config = $config;
-
         $this->http = $http;
-
         $this->session = $session;
-
         parent::__construct($resultFactory);
     }
 
     private function isAllowed()
     {
         $items = $this->session->getQuote()->getItems();
-
         $status = true;
-
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
-        foreach ($items as $item) {
-            $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-            if (!$status){
+        /** @var \Magento\Quote\Model\Quote\Item $item */
+        foreach ($items as $item)
+        {
+            if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true))
+            {
+                $status = false;
                 break;
             }
         }

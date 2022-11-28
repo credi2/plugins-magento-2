@@ -18,13 +18,13 @@ class Available
     /**
      * @var ValidatorPoolInterface
      */
-    protected $validatorPool;
+    protected ?ValidatorPoolInterface $validatorPool;
 
-    protected $registry;
+    protected Registry $registry;
 
-    protected $session;
+    protected Session $session;
 
-    protected $store;
+    protected Store $store;
 
     public function __construct(
         Config $config,
@@ -35,13 +35,9 @@ class Available
     )
     {
         $this->registry = $registry;
-
         $this->validatorPool = $validatorPool;
-
         $this->config = $config;
-
         $this->session = $session;
-
         $this->store = $storeHelper;
     }
 
@@ -72,23 +68,21 @@ class Available
     protected function isProductTypeAllow()
     {
         if ($product = $this->getProduct()) {
-            return in_array($product->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
+            return !in_array($product->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true);
         }
 
         return true;
     }
 
-    protected function checkCartItems()
+    protected function checkCartItems(): bool
     {
         $items = $this->session->getQuote()->getItems();
-
         $status = true;
 
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
-            $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-            if (!$status){
+            if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true)){
+                $status = false;
                 break;
             }
         }

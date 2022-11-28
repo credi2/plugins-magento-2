@@ -15,21 +15,21 @@ class InstructionsConfigProvider implements ConfigProviderInterface
     /**
      * @var string[]
      */
-    protected $methodCodes = [
+    protected array $methodCodes = [
         Ui\ConfigProvider::CODE,
     ];
 
     /**
      * @var \Magento\Payment\Model\Method\AbstractMethod[]
      */
-    protected $methods = [];
+    protected array $methods = [];
 
     /**
      * @var Escaper
      */
-    protected $escaper;
+    protected Escaper $escaper;
 
-    protected $cartInterface;
+    protected CartInterface $cartInterface;
 
     /**
      * InstructionsConfigProvider constructor.
@@ -53,7 +53,7 @@ class InstructionsConfigProvider implements ConfigProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $config = [];
         foreach ($this->methodCodes as $code) {
