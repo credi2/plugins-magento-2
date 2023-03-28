@@ -3,6 +3,7 @@
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use LimeSoda\Cashpresso\Api\Checkout;
 use Magento\Framework\App\RequestInterface;
@@ -25,8 +26,7 @@ class BeforeSaveOrderObserver extends AbstractDataAssignObserver
 
     /**
      * @param Observer $observer
-     * @throws \LimeSoda\Cashpresso\Gateway\Exception
-     * @throws \Zend_Http_Client_Exception
+     * @throws LocalizedException
      */
     public function execute(Observer $observer)
     {

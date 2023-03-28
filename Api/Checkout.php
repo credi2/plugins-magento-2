@@ -2,8 +2,13 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
+use DomainException;
 use LimeSoda\Cashpresso\Gateway\Config as CashpressoConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 
 class Checkout extends Base
 {
@@ -16,7 +21,7 @@ class Checkout extends Base
 
     protected $postData;
 
-    /** @var \Magento\Sales\Model\Order $order */
+    /** @var Order $order */
     protected $order;
 
     public function setVerificationHash($data)
@@ -35,17 +40,20 @@ class Checkout extends Base
         return $data;
     }
 
+    /**
+     * @throws LocalizedException
+     */
     public function getContent(): array
     {
         $order = $this->order;
         $price = $this->priceCurrency->round($order->getGrandTotal());
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
+        /** @var Payment $payment */
         $payment = $order->getPayment();
 
         $data = [
             'partnerApiKey' => $this->getPartnerApiKey(),
-            'c2EcomId' => $payment->getData(\Magento\Sales\Api\Data\OrderPaymentInterface::ADDITIONAL_INFORMATION . '/cashpressoToken'),
+            'c2EcomId' => $payment->getData(OrderPaymentInterface::ADDITIONAL_INFORMATION . '/cashpressoToken'),
             'amount' => $price,
             'validUntil' => $this->getConfig()->getTimeout(),
             'bankUsage' => $order->getIncrementId(),
@@ -92,7 +100,7 @@ class Checkout extends Base
      * @param $bankUsage
      * @param string $targetAccountId
      * @return string
-     * @throws \LimeSoda\Cashpresso\Gateway\Exception
+     * @throws Exception|LocalizedException
      */
     public function getHash($amount, $bankUsage, $targetAccountId = ''): string
     {
@@ -100,29 +108,29 @@ class Checkout extends Base
     }
 
     /**
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return null
-     * @throws \LimeSoda\Cashpresso\Gateway\Exception
-     * @throws \Zend_Http_Client_Exception
+     * @throws DomainException
+     * @throws LocalizedException
      */
     public function sendOrder($order)
     {
         $this->order = $order;
 
-        /** @var \Magento\Framework\HTTP\ZendClient $request */
+
         $request = $this->getRequest(Checkout::METHOD_BUY);
 
         if ($this->getConfig()->isDebugEnabled()) {
             $this->logger->debug(print_r($this->postData, true));
         }
 
-        $response = $request->request();
+        $response = $request->send();
 
         if ($this->getConfig()->isDebugEnabled()) {
             $this->logger->debug($response->getBody());
         }
 
-        if ($response->isSuccessful()) {
+        if ($response->isSuccess()) {
             $respond = $this->json->deserialize($response->getBody());
 
             if (is_array($respond)) {
@@ -138,6 +146,6 @@ class Checkout extends Base
             }
         }
 
-        throw new \DomainException(__('cashpresso order request error: %1', $response->getMessage()));
+        throw new DomainException(__('cashpresso order request error: %1', $response->getReasonPhrase()));
     }
 }

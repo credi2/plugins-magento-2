@@ -14,7 +14,9 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
-use PHPUnit\Exception;
+use DomainException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception;
 
 class Account extends Base
 {
@@ -22,6 +24,9 @@ class Account extends Base
 
     protected $postData;
 
+    /**
+     * @throws LocalizedException
+     */
     public function getContent(): array
     {
         $data = [
@@ -34,18 +39,21 @@ class Account extends Base
         return $data;
     }
 
+    /**
+     * @throws Exception
+     * @throws DomainException
+     */
     public function getTargetAccounts()
     {
         if ($this->getConfig()->isDebugEnabled()) {
             $this->logger->debug(print_r($this->postData, true));
         }
 
-        /** @var \Magento\Framework\HTTP\ZendClient $request */
         $request = $this->getRequest(Account::METHOD_TARGET_ACCOUNTS);
 
-        $response = $request->request();
+        $response = $request->send();
 
-        if ($response->isSuccessful()) {
+        if ($response->isSuccess()) {
             $respond = $this->json->deserialize($response->getBody());
 
             if (is_array($respond)) {
@@ -57,6 +65,6 @@ class Account extends Base
             return [];
         }
 
-        throw new \DomainException(__('cashpresso target account request error: %1', $response->getMessage()));
+        throw new DomainException(__('cashpresso target account request error: %1', $response->getReasonPhrase()));
     }
 }
