@@ -191,9 +191,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getConvertTime($date, $hrs)
     {
-        $date = new \Zend_Date($date);
-        $date->addHour($hrs);
-        return date(DATE_ATOM, $date->getTimestamp());
+        $date = strtotime("+" . $hrs . " hours", $date);
+        return date(DATE_ATOM, $date);
     }
 
     /**
