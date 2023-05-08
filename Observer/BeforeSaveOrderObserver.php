@@ -3,38 +3,38 @@
 namespace LimeSoda\Cashpresso\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use LimeSoda\Cashpresso\Api\Checkout;
+use Magento\Framework\App\RequestInterface;
 
 class BeforeSaveOrderObserver extends AbstractDataAssignObserver
 {
 
-    protected $request;
+    protected RequestInterface $request;
 
-    protected $checkout;
+    protected Checkout $checkout;
 
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \LimeSoda\Cashpresso\Api\Checkout $checkout
+        RequestInterface $request,
+        Checkout $checkout
     )
     {
         $this->request = $request;
-
         $this->checkout = $checkout;
     }
 
     /**
      * @param Observer $observer
-     * @throws \LimeSoda\Cashpresso\Gateway\Exception
-     * @throws \Zend_Http_Client_Exception
+     * @throws LocalizedException
      */
     public function execute(Observer $observer)
     {
         $event = $observer->getEvent();
         $order = $event->getOrder();
 
-        if ($order->getPayment()->getMethod() == 'cashpresso') {
+        if ($order->getPayment()->getMethod() === 'cashpresso') {
             $purchaseId = $this->checkout->sendOrder($order);
-
             $order->getPayment()->setAdditionalInformation('purchaseId', $purchaseId);
         }
     }

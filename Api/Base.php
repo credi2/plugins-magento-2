@@ -2,13 +2,15 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
+use Laminas\Http\Client;
+use Laminas\Http\Client\Adapter\Curl;
+use Laminas\Http\Request;
 use LimeSoda\Cashpresso\Gateway\Config;
 use Magento\Framework\App\Action\Context;
 use LimeSoda\Cashpresso\Logger\Logger;
-use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\DataObject;
+use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\Rest\Request\Deserializer\Json;
-use Magento\Framework\HTTP\ZendClient;
 use LimeSoda\Cashpresso\Helper\Store;
 use Magento\Framework\UrlInterface;
 use LimeSoda\Cashpresso\Model\CustomerSession;
@@ -70,7 +72,7 @@ abstract class Base
     public function __construct(Config $config,
                                 Context $context,
                                 Logger $logger,
-                                ZendClient $client,
+                                Client $client,
                                 DataObject $dataObject,
                                 Json $json,
                                 Store $store,
@@ -93,7 +95,7 @@ abstract class Base
         $this->messageManager = $context->getMessageManager();
     }
 
-    abstract function getContent();
+    abstract function getContent(): array;
 
     /**
      * @return Config
@@ -105,12 +107,12 @@ abstract class Base
 
     /**
      * @param $respond
-     * @return bool
+     * @return bool|array
      */
     protected function handleRespond($respond)
     {
         if (empty($respond['success'])) {
-            $errors = isset($respond['errors']) ? $respond['errors'] : [$respond['error']];
+            $errors = $respond['errors'] ?? [$respond['error']];
 
             foreach ($errors as $error) {
                 if (!empty($error['type']) && $this->handleError($error['type'])) {
@@ -130,7 +132,7 @@ abstract class Base
 
     /**
      * @param $code
-     * @return null|string
+     * @return Phrase|null
      */
     public function handleError($code)
     {
@@ -183,7 +185,6 @@ abstract class Base
 
     /**
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getPartnerApiKey()
     {
@@ -192,7 +193,6 @@ abstract class Base
 
     /**
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getSecretKey()
     {
@@ -214,8 +214,7 @@ abstract class Base
      * src/vendor/magento/module-signifyd/Model/SignifydGateway/Client/HttpClientFactory.php
      *
      * @param $method
-     * @return \Magento\Framework\HTTP\ZendClient
-     * @throws \Zend_Http_Client_Exception
+     * @return Client
      */
     public function getRequest($method)
     {
@@ -232,10 +231,11 @@ abstract class Base
 
         $content = $partnerInfoObject->toJson();
 
-        /** @var \Magento\Framework\HTTP\Client\Curl $client */
+        $this->client->setAdapter(Curl::class);
         $this->client->setUri($this->getUrl() . $method);
-        $this->client->setRawData($content, self::$jsonDataType);
-        $this->client->setMethod(Request::HTTP_METHOD_POST);
+        $this->client->setRawBody($content);
+        $this->client->setMethod(Request::METHOD_POST);
+        $this->client->setEncType(self::$jsonDataType);
 
         return $this->client;
     }

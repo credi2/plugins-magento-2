@@ -10,11 +10,11 @@ class PartnerInfoPlugin
 {
     const DATA_PATH_PARTNERINFO = 'groups/cashpresso/fields/partnerinfo/inherit';
 
-    protected $csConfig;
+    protected Config $csConfig;
 
-    protected $partnerInfo;
+    protected PartnerInfo $partnerInfo;
 
-    protected $store;
+    protected Store $store;
 
     public function __construct(Config $config,
                                 PartnerInfo $partnerInfo,

@@ -10,12 +10,12 @@ class ClassConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager  = null;
     }

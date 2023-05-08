@@ -11,9 +11,9 @@ use Magento\Framework\Pricing\Render\RendererPool;
 
 class CSPriceBox extends FinalPriceBox
 {
-    protected $available;
+    protected Gateway\Available $available;
 
-    protected $config;
+    protected Gateway\Config $config;
 
     /**
      * CSPriceBox constructor.
@@ -34,12 +34,9 @@ class CSPriceBox extends FinalPriceBox
         Gateway\Available $available,
         Gateway\Config $config,
         array $data = []
-    )
-    {
+    ) {
         $this->config = $config;
-
         $this->available = $available;
-
         parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
     }
 
@@ -78,11 +75,6 @@ class CSPriceBox extends FinalPriceBox
         if ($salableItem = $this->getSaleableItem()) {
             if ($salableItem->getTypeId()) {
                 switch ($salableItem->getTypeId()) {
-                    case 'configurable':
-                        $finalPriceModel = $this->getPriceType('final_price');
-
-                        $price = $finalPriceModel->getAmount()->getValue();
-                        break;
                     case 'grouped':
                         $minProduct = $this->getSaleableItem()
                             ->getPriceInfo()

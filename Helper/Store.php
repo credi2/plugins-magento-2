@@ -9,16 +9,16 @@ use Magento\Framework\Locale\Resolver;
 
 class Store
 {
-    protected $request;
+    protected RequestInterface $request;
 
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
 
-    protected $store;
+    protected Resolver $store;
 
     /**
      * @var \Magento\Framework\App\State
      */
-    protected $state;
+    protected State $state;
 
     public function __construct(
         RequestInterface $request,
@@ -55,9 +55,8 @@ class Store
         }
         $storeId = $this->getCurrentStoredId();
         $store = $this->storeManager->getStore($storeId);
-        $websiteId = $store->getWebsiteId();
 
-        return $websiteId;
+        return $store->getWebsiteId();
     }
 
     /**
@@ -65,7 +64,7 @@ class Store
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getStoreCurrency($storeId = null)
+    public function getStoreCurrency($storeId = null): string
     {
         $storeId = $storeId ? $storeId : $this->getCurrentStoredId();
 
@@ -76,7 +75,7 @@ class Store
      * @param null $storeId
      * @return string
      */
-    public function getStoreName($storeId = null)
+    public function getStoreName($storeId = null): string
     {
         return (string)$this->storeManager->getStore($storeId)->getName();
     }

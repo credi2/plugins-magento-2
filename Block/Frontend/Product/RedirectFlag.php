@@ -7,7 +7,7 @@ use LimeSoda\Cashpresso\Gateway\Config;
 
 class RedirectFlag extends Template
 {
-    protected $config;
+    protected Config $config;
 
     /**
      * RedirectFlag constructor.

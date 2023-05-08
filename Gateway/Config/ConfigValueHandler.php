@@ -12,7 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
-
+use LimeSoda\Cashpresso\Gateway\Config;
 /**
  * Default implementation of config value handler.
  *
@@ -24,9 +24,9 @@ use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 class ConfigValueHandler implements ValueHandlerInterface
 {
     /**
-     * @var \LimeSoda\Cashpresso\Gateway\Config
+     * @var Config
      */
-    protected $configInterface;
+    protected Config $configInterface;
 
     /**
      * @param \Magento\Payment\Gateway\ConfigInterface $configInterface

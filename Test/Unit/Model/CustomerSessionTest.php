@@ -22,7 +22,7 @@ class CustomerSessionTest extends \PHPUnit\Framework\TestCase
 
     protected $billingAddress;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);

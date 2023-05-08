@@ -12,21 +12,21 @@ use Magento\Framework\Registry;
 
 class Script extends Template
 {
-    protected $config;
+    protected Gateway\Config $config;
 
-    protected $available;
+    protected Gateway\Available $available;
 
-    protected $checkoutSession;
+    protected Session $checkoutSession;
 
-    protected $customer;
+    protected CustomerSession $customer;
 
-    protected $store;
+    protected Store $store;
 
     protected $type;
 
-    protected $priceCurrency;
+    protected PriceCurrencyInterface $priceCurrency;
 
-    protected $registry;
+    protected Registry $registry;
 
     /**
      * Script constructor.
@@ -104,7 +104,7 @@ class Script extends Template
     {
         $product = $this->registry->registry('product');
 
-        return $product && $product->getId() ? true : false;
+        return $product && $product->getId();
     }
 
     protected function _toHtml()

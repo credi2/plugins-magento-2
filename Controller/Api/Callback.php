@@ -2,29 +2,35 @@
 
 namespace LimeSoda\Cashpresso\Controller\Api;
 
+use LimeSoda\Cashpresso\Logger\Logger;
+use Magento\Backend\App\Action\Context;
+use LimeSoda\Cashpresso\Gateway\Config;
+use LimeSoda\Cashpresso\Model\OrderStatus;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+
 class Callback extends \Magento\Framework\App\Action\Action
 {
-    protected $logger;
+    protected Logger $logger;
 
-    protected $context;
+    protected Context $context;
 
-    protected $orderStatus;
+    protected OrderStatus $orderStatus;
 
-    protected $cacheTypeListInterface;
+    protected TypeListInterface $cacheTypeListInterface;
 
-    protected $resultForwardFactory;
+    protected ForwardFactory $resultForwardFactory;
 
-    protected $config;
+    protected Config $config;
 
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \LimeSoda\Cashpresso\Gateway\Config $config,
-        \LimeSoda\Cashpresso\Logger\Logger $logger,
-        \LimeSoda\Cashpresso\Model\OrderStatus $orderStatus,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeListInterface,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory
-    )
-    {
+        Context $context,
+        Config $config,
+        Logger $logger,
+        OrderStatus $orderStatus,
+        TypeListInterface $cacheTypeListInterface,
+        ForwardFactory $resultForwardFactory
+    ) {
         $this->logger = $logger;
 
         $this->context = $context;

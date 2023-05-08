@@ -2,23 +2,24 @@
 
 namespace LimeSoda\Cashpresso\Api;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception;
+
 class Info extends Base
 {
     const METHOD_PARTNER_INFO = 'partnerInfo';
 
     /**
      * @return bool|null
-     * @throws \Magento\Framework\Webapi\Exception
-     * @throws \Zend_Http_Client_Exception
+     * @throws Exception
      */
     public function getPartnerInfo()
     {
-        /** @var \Magento\Framework\HTTP\ZendClient $request */
         $request = $this->getRequest(Info::METHOD_PARTNER_INFO);
 
-        $response = $request->request();
+        $response = $request->send();
 
-        if ($response->isSuccessful()) {
+        if ($response->isSuccess()) {
             $respond = $this->json->deserialize($response->getBody());
 
             if (is_array($respond)) {
@@ -26,15 +27,16 @@ class Info extends Base
             }
         }
 
-        $this->logger->error('cashpresso getPartnerInfo error: ' . $response->getMessage());
+        $this->logger->error('cashpresso getPartnerInfo error: ' . $response->getReasonPhrase());
 
         return null;
     }
 
     /**
      * @return array
+     * @throws LocalizedException
      */
-    public function getContent()
+    public function getContent(): array
     {
         return ['partnerApiKey' => $this->getPartnerApiKey()];
     }

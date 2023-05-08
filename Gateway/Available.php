@@ -2,10 +2,15 @@
 
 namespace LimeSoda\Cashpresso\Gateway;
 
+use DomainException;
 use LimeSoda\Cashpresso\Helper\Store;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Framework\Registry;
 use Magento\Checkout\Model\Session;
+use Magento\Quote\Model\Quote\Item;
 
 class Available
 {
@@ -18,13 +23,13 @@ class Available
     /**
      * @var ValidatorPoolInterface
      */
-    protected $validatorPool;
+    protected ?ValidatorPoolInterface $validatorPool;
 
-    protected $registry;
+    protected Registry $registry;
 
-    protected $session;
+    protected Session $session;
 
-    protected $store;
+    protected Store $store;
 
     public function __construct(
         Config $config,
@@ -35,13 +40,9 @@ class Available
     )
     {
         $this->registry = $registry;
-
         $this->validatorPool = $validatorPool;
-
         $this->config = $config;
-
         $this->session = $session;
-
         $this->store = $storeHelper;
     }
 
@@ -59,36 +60,42 @@ class Available
      * Returns Validator pool
      *
      * @return ValidatorPoolInterface
-     * @throws \DomainException
+     * @throws DomainException
      */
     public function getValidatorPool()
     {
         if ($this->validatorPool === null) {
-            throw new \DomainException('Validator pool is not configured for use.');
+            throw new DomainException('Validator pool is not configured for use.');
         }
         return $this->validatorPool;
     }
 
+    /**
+     * @return bool
+     */
     protected function isProductTypeAllow()
     {
         if ($product = $this->getProduct()) {
-            return in_array($product->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
+            return !in_array($product->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true);
         }
 
         return true;
     }
 
-    protected function checkCartItems()
+    /**
+     * @return bool
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    protected function checkCartItems(): bool
     {
         $items = $this->session->getQuote()->getItems();
-
         $status = true;
 
-        /** @var \‌Magento\Quote\Model\Quote\Item $item */
+        /** @var Item $item */
         foreach ($items as $item) {
-            $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-            if (!$status){
+            if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true)){
+                $status = false;
                 break;
             }
         }
@@ -96,6 +103,12 @@ class Available
         return $status;
     }
 
+    /**
+     * @param $type
+     * @return array|false|mixed|null
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function isAvailable($type = null)
     {
         if (!$this->config->isActive() || !$this->config->getAPIKey() || !$this->config->getSecretKey()) {

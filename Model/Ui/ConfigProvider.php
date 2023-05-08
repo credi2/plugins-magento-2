@@ -20,14 +20,14 @@ class ConfigProvider implements ConfigProviderInterface
     /**
      * @var Config
      */
-    protected $config;
+    protected Config $config;
 
     /**
      * @var SessionManagerInterface
      */
-    protected $session;
+    protected SessionManagerInterface $session;
 
-    protected $checkoutSession;
+    protected CheckoutSession $checkoutSession;
 
     /**
      * Constructor
@@ -45,7 +45,7 @@ class ConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $checkoutSession;
     }
 
-    private function isAllowed()
+    private function isAllowed(): bool
     {
         $items = $this->checkoutSession->getQuote()->getItems();
 
@@ -53,9 +53,8 @@ class ConfigProvider implements ConfigProviderInterface
 
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
-            $status = in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard']) ? false : true;
-
-            if (!$status){
+            if (in_array($item->getProduct()->getTypeId(), ['virtual', 'downloadable', 'giftcard'], true)){
+                $status = false;
                 break;
             }
         }
@@ -68,7 +67,7 @@ class ConfigProvider implements ConfigProviderInterface
      *
      * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $storeId = $this->session->getStoreId();
 
