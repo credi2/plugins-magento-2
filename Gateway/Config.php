@@ -2,7 +2,11 @@
 
 namespace LimeSoda\Cashpresso\Gateway;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\Rest\Request\Deserializer\Json;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -42,12 +46,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     protected DateTime $date;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected State $state;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected StoreManagerInterface $storeManager;
 
@@ -68,7 +72,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      *
      * @param ScopeConfigInterface $scopeConfig
      * @param EncryptorInterface $encryptor
-     * @param Json|null $json
+     * @param Json $json
      * @param DateTime $date
      * @param State $state
      * @param Http $httpRequest
@@ -103,10 +107,12 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return int
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
     private function setScopeAndStoreId()
     {
-        if($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML){
+        if($this->state->getAreaCode() == Area::AREA_ADMINHTML){
             $storeId = (int) $this->httpRequest->getParam('store', 0);
             $websiteId = (int) $this->httpRequest->getParam('website', 0);
             if ($storeId === 0 && $websiteId > 0) {
@@ -128,16 +134,22 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $storeId;
     }
 
+    /**
+     * @return string
+     */
     private function getScope(){
         return $this->scope;
     }
 
+    /**
+     * @return int
+     */
     private function getStoreId(){
         return $this->storeId;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
     public function getAPIKey()
     {
@@ -146,13 +158,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSecretKey()
     {
         return $this->encryptor->decrypt($this->scopeConfig->getValue(Config::XML_PARTNER_SECRET_KEY, $this->getScope(), $this->getStoreId()));
     }
 
+    /**
+     * @return array|null
+     * @throws Exception
+     */
     public function getPartnerInfo()
     {
         $value = $this->scopeConfig->getValue(Config::XML_PARTNER_INFO, $this->getScope(), $this->getStoreId());
@@ -161,7 +177,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @param null $storeId
      * @return int
      */
     public function getStatus()
@@ -169,16 +184,19 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return (int)$this->getValue(Config::XML_PARTNER_STATUS, $this->getStoreId());
     }
 
+    /**
+     * @param $date
+     * @param $hrs
+     * @return string
+     */
     public function getConvertTime($date, $hrs)
     {
-        $date = new \Zend_Date($date);
-        $date->addHour($hrs);
-        return date(DATE_ATOM, $date->getTimestamp());
+        $date = strtotime("+" . $hrs . " hours", $date);
+        return date(DATE_ATOM, $date);
     }
 
     /**
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getTimeout()
     {
@@ -189,8 +207,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * 1 - live; 0 - test
-     * @param null $storeId
-     * @return mixed
+     * @return int
      */
     public function getMode()
     {
@@ -198,9 +215,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return int
      */
     public function getWidgetType()
     {
@@ -208,8 +223,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @param null $storeId
      * @return bool
+     * @throws Exception
      */
     public function getInterestFreeDay()
     {
@@ -227,9 +242,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getTemplate()
     {
@@ -237,9 +250,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getContractText()
     {
@@ -247,9 +258,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getSuccessText()
     {
@@ -257,9 +266,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getSuccessButtonTitle()
     {
@@ -267,9 +274,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getSuccessTitle()
     {
@@ -277,9 +282,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return int
      */
     public function getPlaceToShow()
     {
@@ -287,9 +290,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return int
      */
     public function showCheckoutButton()
     {
@@ -297,9 +298,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     *
-     * @param null $storeId
-     * @return mixed
+     * @return string
      */
     public function getCheckoutUrl()
     {
@@ -309,7 +308,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * Gets Payment configuration status.
      *
-     * @param int|null $storeId
      * @return bool
      */
     public function isActive(): bool
@@ -327,7 +325,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function isDebugEnabled(): bool
     {
@@ -352,6 +350,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return null
+     * @throws Exception
      */
     public function getTotalLimit()
     {
@@ -362,6 +361,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return null
+     * @throws Exception
      */
     public function getPaybackRate()
     {
@@ -372,6 +372,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return null
+     * @throws Exception
      */
     public function getMinPaybackAmount()
     {
@@ -382,6 +383,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return null
+     * @throws Exception
      */
     public function getContractCurrency()
     {
@@ -390,6 +392,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return empty($partnerInfo['currency']) ? null : $partnerInfo['currency'];
     }
 
+    /**
+     * @return string
+     */
     protected function _getDomain()
     {
         return 'https://' . ($this->getMode() ? 'my.cashpresso.com' : 'my.test-cashpresso.com') . '/';
@@ -409,9 +414,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getJsCheckoutScript(): string
     {
-        $jsSrc = $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_checkout.all.min.js';
-
-        return $jsSrc;
+        return $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_checkout.all.min.js';
     }
 
     /**
@@ -419,9 +422,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getJsPostCheckoutScript(): string
     {
-        $jsSrc = $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_post_checkout.all.min.js';
-
-        return $jsSrc;
+        return $this->_getDomain() . 'ecommerce/v2/checkout/c2_ecom_post_checkout.all.min.js';
     }
 
     /**
@@ -445,13 +446,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 
     /**
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getCurrentStore()
     {
         $website_id = null;
 
-        if ($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+        if ($this->state->getAreaCode() == Area::AREA_ADMINHTML) {
             $storeId = (int) $this->httpRequest->getParam('store', 0);
         } else {
             $storeId = true; // get current store from the store resolver

@@ -19,7 +19,7 @@ class PricePlugin
             return $price;
         }
 
-        $priceRender = $priceRenderBlock ->setData('is_product_list', true);
+        $priceRender = $priceRenderBlock->setData('is_product_list', true);
 
         $priceCS = '';
 
