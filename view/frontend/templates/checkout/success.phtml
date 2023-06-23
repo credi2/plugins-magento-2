@@ -49,7 +49,7 @@
             defer
             data-c2-partnerApiKey="<?php echo $config->getAPIKey() ?>"
             data-c2-purchaseId="<?php echo $this->getPurchaseId() ?>"
-            data-c2-mode="<?php echo $config->getMode() ? 'live' : 'test' ?>"
+            data-c2-mode="<?php echo $config->getModeString() ?>"
             data-c2-locale="<?php echo $this->getLocale() ?>"
             data-c2-successCallback="true"
     ></script>

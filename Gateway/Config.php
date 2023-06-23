@@ -407,6 +407,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         }
     }
 
+    public function getModeString() {
+        switch ($this->getMode()) {
+            case -1:
+                return 'dev';
+            case 0:                 
+                return 'test';
+            default:
+                return 'live';
+        }
+    }
+
     /**
      * @return string
      */

@@ -9,7 +9,7 @@
         defer
         data-c2-partnerApiKey="<?php echo $block->getConfig()->getAPIKey($block->getStoreId()) ?>"
         data-c2-interestFreeDaysMerchant="<?php echo $block->getConfig()->getInterestFreeDay() ?>"
-        data-c2-mode="<?php echo $block->getConfig()->getMode($block->getStoreId()) ? 'live' : 'test' ?>"
+        data-c2-mode="<?php echo $block->getConfig()->getModeString() ?>"
         data-c2-locale="<?php echo $block->getLocale() ?>"
         data-c2-email="<?php echo  $customer->getEmail() ?>"
         data-c2-given="<?php echo  $customer->getFirstname() ?>"
