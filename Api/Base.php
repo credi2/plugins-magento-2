@@ -210,7 +210,6 @@ abstract class Base
             default:
                 return self::LIVE_URL;
         }
-        return $this->getConfig()->getMode() ? self::LIVE_URL : self::TEST_URL;
     }
 
     protected function getDataObject()
