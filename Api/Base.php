@@ -32,8 +32,9 @@ abstract class Base
     const CP_ERROR_INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR';
     const CP_ERROR_DUPLICATE_CUSTOMER = 'DUPLICATE_CUSTOMER';
 
+    const DEV_URL = 'https://backend.dev-cashpresso.com/backend/ecommerce/v2/';
     const TEST_URL = 'https://backend.test-cashpresso.com/backend/ecommerce/v2/';
-    const LIVE_URL = 'https://backend.cashpresso.com/rest/backend/ecommerce/v2/';
+    const LIVE_URL = 'https://rest.cashpresso.com/backend/ecommerce/v2/';
 
     /**
      * JSON HTTP Content-Type Header.
@@ -201,7 +202,14 @@ abstract class Base
 
     public function getUrl()
     {
-        return $this->getConfig()->getMode() ? self::LIVE_URL : self::TEST_URL;
+        switch ($this->getConfig()->getMode()) {
+            case -1:
+                return self::DEV_URL;
+            case 0:                
+                return self::TEST_URL;
+            default:
+                return self::LIVE_URL;
+        }
     }
 
     protected function getDataObject()

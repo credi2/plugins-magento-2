@@ -13,7 +13,8 @@ class Mode implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             ['value' => 1, 'label'=> __('Live')],
-            ['value' => 0, 'label'=> __('Test')]
+            ['value' => 0, 'label'=> __('Test')],
+            ['value' => -1, 'label'=> __('Dev')]
         ];
     }
 }

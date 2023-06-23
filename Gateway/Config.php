@@ -206,7 +206,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     }
 
     /**
-     * 1 - live; 0 - test
+     * 1 - live; 0 - test; -1 dev
      * @return int
      */
     public function getMode()
@@ -397,7 +397,25 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     protected function _getDomain()
     {
-        return 'https://' . ($this->getMode() ? 'my.cashpresso.com' : 'my.test-cashpresso.com') . '/';
+        switch ($this->getMode()) {
+            case -1:
+                return 'https://my.dev-cashpresso.com/';
+            case 0:                 
+                return 'https://my.test-cashpresso.com/';
+            default:
+                return 'https://my.cashpresso.com/';
+        }
+    }
+
+    public function getModeString() {
+        switch ($this->getMode()) {
+            case -1:
+                return 'dev';
+            case 0:                 
+                return 'test';
+            default:
+                return 'live';
+        }
     }
 
     /**
