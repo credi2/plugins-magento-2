@@ -51,7 +51,8 @@ define([
 
         validate: function () {
             if (!this.getData().additional_data.cashpressoToken) {
-                this.error($.mage.__('cashpresso: please fill all data.'));
+                window.C2EcomCheckout.startOverlayWizard();
+                return false;
             }
 
             return true;
