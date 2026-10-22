@@ -37,11 +37,11 @@ class Account extends \Magento\Framework\App\Config\Value
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         MutableScopeConfigInterface $mutableConfig,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
         ApiAccount $account,
         Config $csConfig,
         ReinitableConfigInterface $appConfig,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     )
     {
