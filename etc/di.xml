@@ -39,6 +39,26 @@
         <plugin name="admin_system_config_save_plugin" type="LimeSoda\Cashpresso\Plugin\Config\SavePlugin" sortOrder="1"/>
     </type>
 
+    <!-- Proxies keep config saves from building the customer session, which fails during setup:install. -->
+    <type name="LimeSoda\Cashpresso\Plugin\Config\SavePlugin">
+        <arguments>
+            <argument name="account" xsi:type="object">LimeSoda\Cashpresso\Api\Account\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="LimeSoda\Cashpresso\Plugin\Config\PartnerInfoPlugin">
+        <arguments>
+            <argument name="partnerInfo" xsi:type="object">LimeSoda\Cashpresso\Model\PartnerInfo\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="LimeSoda\Cashpresso\Model\CustomerSession">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Catalog\Block\Product\AbstractProduct">
         <plugin name="catalog_product_item_abstract_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\AbstractProduct\PricePlugin" sortOrder="1"/>
     </type>
