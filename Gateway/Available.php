@@ -36,7 +36,7 @@ class Available
         Registry $registry,
         Session $session,
         Store $storeHelper,
-        ValidatorPoolInterface $validatorPool = null
+        ?ValidatorPoolInterface $validatorPool = null
     )
     {
         $this->registry = $registry;
