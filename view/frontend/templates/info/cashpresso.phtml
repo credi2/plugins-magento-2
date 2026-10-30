@@ -1,0 +1,25 @@
+<?php
+/**
+ * @var \Credi2\CashpressoPayments\Block\Info $block
+ */
+?>
+
+<div class="cashpresso-payment-info">
+    <h4><?= $block->escapeHtml(__('Payment Information')) ?></h4>
+    
+    <?php if ($purchaseId = $block->getPurchaseId()): ?>
+        <p><strong><?= $block->escapeHtml(__('Purchase ID:')) ?></strong> <?= $block->escapeHtml($purchaseId) ?></p>
+    <?php endif; ?>
+    
+    <?php if ($authorizationId = $block->getAuthorizationId()): ?>
+        <p><strong><?= $block->escapeHtml(__('Authorization ID:')) ?></strong> <?= $block->escapeHtml($authorizationId) ?></p>
+    <?php endif; ?>
+    
+    <?php if ($orderId = $block->getOrderId()): ?>
+        <p><strong><?= $block->escapeHtml(__('Cashpresso Order ID:')) ?></strong> <?= $block->escapeHtml($orderId) ?></p>
+    <?php endif; ?>
+    
+    <?php if ($orderNumber = $block->getCashpressoOrderNumber()): ?>
+        <p><strong><?= $block->escapeHtml(__('Cashpresso Order Number:')) ?></strong> <?= $block->escapeHtml($orderNumber) ?></p>
+    <?php endif; ?>
+</div>

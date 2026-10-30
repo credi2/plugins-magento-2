@@ -1,0 +1,33 @@
+<?php
+/**
+ * @var \Credi2\CashpressoPayments\Block\Product\Widget $block
+ */
+?>
+
+<?php if ($block->isEnabled() && $block->getProductPrice() >= 20): ?>
+    <?php if ($block->isDynamicLabel()): ?>
+        <!-- Dynamic Label Version -->
+        <div class="c2-financing-label" data-c2-financing-amount="<?= $block->getProductPrice() ?>"></div>
+        <script id="c2LabelScript" type="text/javascript"
+                src="https://my.cashpresso.com/ecommerce/v2/label/c2_ecom_wizard.all.min.js"
+                defer
+                data-c2-partnerApiKey="<?= $block->escapeHtmlAttr($block->getApiKey()) ?>"
+                data-c2-interestFreeDaysMerchant="<?= $block->getInterestFreeDays() ?>"
+                data-c2-mode="<?= $block->isLive() ? 'live' : 'test' ?>"
+                data-c2-locale="<?= $block->escapeHtmlAttr($block->getLanguageCode()) ?>">
+        </script>
+    <?php elseif ($block->shouldShowStaticLabel()): ?>
+        <!-- Static Label Version -->
+        <a href="#" onclick="C2EcomWizard.startOverlayWizard(<?= $block->getProductPrice() ?>)">
+            <?= __('or from € %1 / month', number_format($block->getStaticLabelMonthlyAmount(), 2)) ?>
+        </a>
+        <script id="c2StaticLabelScript" type="text/javascript"
+                src="https://my.cashpresso.com/ecommerce/v2/label/c2_ecom_wizard_static.all.min.js"
+                defer
+                data-c2-partnerApiKey="<?= $block->escapeHtmlAttr($block->getApiKey()) ?>"
+                data-c2-interestFreeDaysMerchant="<?= $block->getInterestFreeDays() ?>"
+                data-c2-mode="<?= $block->isLive() ? 'live' : 'test' ?>"
+                data-c2-locale="<?= $block->escapeHtmlAttr($block->getLanguageCode()) ?>">
+        </script>
+    <?php endif; ?>
+<?php endif; ?>

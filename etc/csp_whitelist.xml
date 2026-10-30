@@ -1,32 +1,39 @@
 <?xml version="1.0"?>
 <csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
     <policies>
-        <policy id="style-src">
-            <values>
-                <value id="cashpresso" type="host">*.cashpresso.com</value>
-                <value id="cashpresso-test" type="host">*.test-cashpresso.com</value>
-                <value id="cashpresso-dev" type="host">*.dev-cashpresso.com</value>
-            </values>
-        </policy>
         <policy id="script-src">
             <values>
-                <value id="cashpresso" type="host">*.cashpresso.com</value>
-                <value id="cashpresso-test" type="host">*.test-cashpresso.com</value>
-                <value id="cashpresso-dev" type="host">*.dev-cashpresso.com</value>
+                <value id="cashpresso_scripts" type="host">my.cashpresso.com</value>
+                <value id="cashpresso_scripts_backend" type="host">backend.test-cashpresso.com</value>
+                <value id="cashpresso_bnpl_prod" type="host">www.purchase.bnpl.cashpresso.com</value>
+                <value id="cashpresso_bnpl_test" type="host">www.bnpl-checkout-dialog.test-cashpresso.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
-                <value id="cashpresso" type="host">*.cashpresso.com</value>
-                <value id="cashpresso-test" type="host">*.test-cashpresso.com</value>
-                <value id="cashpresso-dev" type="host">*.dev-cashpresso.com</value>
+                <value id="cashpresso_api" type="host">my.cashpresso.com</value>
+                <value id="cashpresso_api_rest" type="host">rest.cashpresso.com</value>
+                <value id="cashpresso_api_test" type="host">backend.test-cashpresso.com</value>
+                <value id="cashpresso_api_bnpl" type="host">rest.purchase.c2-postea.com</value>
+                <value id="cashpresso_api_bnpl" type="host">rest.purchase.bnpl.cashpresso.com/</value>
+                <value id="cashpresso_add_test" type="host">my.test-cashpresso.com</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
-                <value id="cashpresso" type="host">*.cashpresso.com</value>
-                <value id="cashpresso-test" type="host">*.test-cashpresso.com</value>
-                <value id="cashpresso-dev" type="host">*.dev-cashpresso.com</value>
+                <value id="cashpresso_frames" type="host">my.cashpresso.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="cashpresso_images" type="host">my.cashpresso.com</value>
+                <value id="cashpresso_images_test" type="host">my.test-cashpresso.com</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="cashpresso_styles" type="host">my.cashpresso.com</value>
+                <value id="cashpresso_styles_test" type="host">my.test-cashpresso.com</value>
             </values>
         </policy>
     </policies>

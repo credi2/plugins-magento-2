@@ -1,187 +1,134 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
--->
-<!-- http://devdocs.magento.com/guides/v2.3/payments-integrations/base-integration/facade-configuration.html -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <!-- Payment Method Facade configuration -->
+    <!-- Cashpresso Classic Payment Method -->
     <virtualType name="CashpressoFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="code" xsi:type="const">LimeSoda\Cashpresso\Model\Ui\ConfigProvider::CODE</argument>
-            <argument name="formBlockType" xsi:type="string">LimeSoda\Cashpresso\Block\Form</argument>
-            <argument name="infoBlockType" xsi:type="string">LimeSoda\Cashpresso\Block\Info</argument>
-            <argument name="infoInstance" xsi:type="string">LimeSoda\Cashpresso\Block\</argument>
-            <argument name="valueHandlerPool" xsi:type="object">cashpressoValueHandlerPool</argument>
-            <argument name="validatorPool" xsi:type="object">cashpressoValidatorPool</argument>
-            <argument name="commandPool" xsi:type="object">cashpressoCommandPool</argument>
+            <argument name="code" xsi:type="string">cashpresso</argument>
+            <argument name="formBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\Payment\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CashpressoValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">CashpressoCommandPool</argument>
         </arguments>
     </virtualType>
 
-    <type name="LimeSoda\Cashpresso\Gateway\Config">
+    <!-- BNPL Installment Payment Method -->
+    <virtualType name="CashpressoBnplInstallmentFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="methodCode" xsi:type="const">LimeSoda\Cashpresso\Model\Ui\ConfigProvider::CODE</argument>
-            <argument name="pathPattern" xsi:type="const">Magento\Payment\Gateway\Config\Config::DEFAULT_PATH_PATTERN</argument>
+            <argument name="code" xsi:type="string">cashpresso_bnpl_installment</argument>
+            <argument name="formBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\Payment\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\Info</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CashpressoBnplInstallmentValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">CashpressoBnplInstallmentCommandPool</argument>
         </arguments>
-    </type>
+    </virtualType>
 
-    <type name="Magento\Config\Model\Config">
-        <plugin name="admin_system_config_save_partner_info_plugin" type="LimeSoda\Cashpresso\Plugin\Config\PartnerInfoPlugin" sortOrder="1"/>
-    </type>
-
-    <type name="Magento\Framework\App\Request\CsrfValidator">
-        <plugin name="csrf_validator_skip" type="LimeSoda\Cashpresso\Plugin\Validation\CsrfValidatorSkip" />
-    </type>
-
-    <type name="Magento\Config\Model\Config">
-        <plugin name="admin_system_config_save_plugin" type="LimeSoda\Cashpresso\Plugin\Config\SavePlugin" sortOrder="1"/>
-    </type>
-
-    <!-- Proxies keep config saves from building the customer session, which fails during setup:install. -->
-    <type name="LimeSoda\Cashpresso\Plugin\Config\SavePlugin">
+    <!-- BNPL Invoice Payment Method -->
+    <virtualType name="CashpressoBnplInvoiceFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>
-            <argument name="account" xsi:type="object">LimeSoda\Cashpresso\Api\Account\Proxy</argument>
+            <argument name="code" xsi:type="string">cashpresso_bnpl_invoice</argument>
+            <argument name="formBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\Payment\Form</argument>
+            <argument name="infoBlockType" xsi:type="string">Credi2\CashpressoPayments\Block\BnplInvoiceInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">CashpressoBnplInvoiceValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">CashpressoBnplInvoiceCommandPool</argument>
         </arguments>
-    </type>
+    </virtualType>
 
-    <type name="LimeSoda\Cashpresso\Plugin\Config\PartnerInfoPlugin">
-        <arguments>
-            <argument name="partnerInfo" xsi:type="object">LimeSoda\Cashpresso\Model\PartnerInfo\Proxy</argument>
-        </arguments>
-    </type>
-
-    <type name="LimeSoda\Cashpresso\Model\CustomerSession">
-        <arguments>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
-            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Catalog\Block\Product\AbstractProduct">
-        <plugin name="catalog_product_item_abstract_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\AbstractProduct\PricePlugin" sortOrder="1"/>
-    </type>
-
-    <type name="Magento\Catalog\Block\Product\ListProduct">
-        <plugin name="catalog_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\PricePlugin" sortOrder="1"/>
-    </type>
-
-    <type name="Magento\Catalog\Block\Product\Widget\NewWidget">
-        <plugin name="catalog_product_list_widget_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\Widget\PricePlugin" sortOrder="1"/>
-    </type>
-
-    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
-        <plugin name="catalog_widget_product_list_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\ProductList\Widget\PricePlugin" sortOrder="1"/>
-    </type>
-
-    <type name="Magento\GroupedProduct\Block\Product\View\Type\Grouped">
-        <plugin name="catalog_group_product_price_plugin" type="LimeSoda\Cashpresso\Plugin\Catalog\GroupedProduct\PricePlugin" sortOrder="1"/>
-    </type>
-
-    <virtualType name="cashpressoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+    <!-- Value Handler Pools -->
+    <virtualType name="CashpressoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="default" xsi:type="string">cashpressoConfigValueHandler</item>
+                <item name="default" xsi:type="string">CashpressoConfigValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="cashpressoConfigValueHandler" type="LimeSoda\Cashpresso\Gateway\Config\ConfigValueHandler">
+    <virtualType name="CashpressoBnplInstallmentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
-            <argument name="configInterface" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="cashpressoCurrencyValidator" type="LimeSoda\Cashpresso\Gateway\Validator\CurrencyValidator">
-        <arguments>
-            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="cashpressoGlobalValidator" type="LimeSoda\Cashpresso\Gateway\Validator\GlobalValidator">
-        <arguments>
-            <argument name="http" xsi:type="object">\Magento\Framework\App\Request\Http</argument>
-            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-
-   <!-- <virtualType name="cashpressoAvailableValidator" type="LimeSoda\Cashpresso\Gateway\Validator\AvailableValidator">
-        <arguments>
-            <argument name="http" xsi:type="object">\Magento\Framework\App\Request\Http</argument>
-            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-            <argument name="product" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-        </arguments>
-    </virtualType>-->
-
-    <virtualType name="cashpressoCountryValidator" type="Magento\Payment\Gateway\Validator\CountryValidator">
-        <arguments>
-            <argument name="config" xsi:type="object">LimeSoda\Cashpresso\Gateway\Config</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="cashpressoValidatorPool" type="Magento\Payment\Gateway\Validator\ValidatorPool">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="currency" xsi:type="string">cashpressoCurrencyValidator</item>
-                <item name="global" xsi:type="string">cashpressoGlobalValidator</item>
-                <item name="country" xsi:type="string">cashpressoCountryValidator</item>
-                <!--<item name="available" xsi:type="string">cashpressoAvailableValidator</item>-->
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CashpressoBnplInstallmentConfigValueHandler</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <!-- Commands infrastructure -->
-    <virtualType name="cashpressoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+    <virtualType name="CashpressoBnplInvoiceValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">CashpressoBnplInvoiceConfigValueHandler</item>
+                <item name="order_place_redirect_url" xsi:type="string">Credi2\CashpressoPayments\Gateway\Config\RedirectUrlValueHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Config Value Handlers -->
+    <virtualType name="CashpressoConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CashpressoConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CashpressoBnplInstallmentConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CashpressoBnplInstallmentConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CashpressoBnplInvoiceConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">CashpressoBnplInvoiceConfig</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Configuration Objects -->
+    <virtualType name="CashpressoConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">cashpresso</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CashpressoBnplInstallmentConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">cashpresso_bnpl_installment</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="CashpressoBnplInvoiceConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">cashpresso_bnpl_invoice</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Command Pools -->
+    <virtualType name="CashpressoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="initialize" xsi:type="string">LimeSoda\Cashpresso\Gateway\Command\State</item>
+                <item name="authorize" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\AuthorizeCommand</item>
+                <item name="capture" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\CaptureCommand</item>
+                <item name="refund" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\RefundCommand</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <type name="LimeSoda\Cashpresso\Logger\Handler">
+    <virtualType name="CashpressoBnplInstallmentCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
-            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplCaptureCommand</item>
+                <item name="refund" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplRefundCommand</item>
+            </argument>
         </arguments>
+    </virtualType>
+
+    <type name="Magento\Sales\Model\Order\Pdf\Invoice">
+        <plugin name="credi2_cashpresso_invoice_pdf_rendering_state" type="Credi2\CashpressoPayments\Plugin\Sales\Pdf\InvoiceGetPdfPlugin"/>
     </type>
 
-    <type name="LimeSoda\Cashpresso\Logger\Logger">
+    <virtualType name="CashpressoBnplInvoiceCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
-            <argument name="name" xsi:type="string">cashpresso</argument>
-            <argument name="handlers"  xsi:type="array">
-                <item name="debug" xsi:type="object">LimeSoda\Cashpresso\Logger\Handler</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <virtualType name="Magento\Bundle\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
-        <arguments>
-            <argument name="prices" xsi:type="array">
-                <item name="cashpresso_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplAuthorizeCommand</item>
+                <item name="capture" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplCaptureCommand</item>
+                <item name="refund" xsi:type="string">Credi2\CashpressoPayments\Gateway\Command\BnplRefundCommand</item>
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\Catalog\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
-        <arguments>
-            <argument name="prices" xsi:type="array">
-                <item name="cashpresso_price" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\ConfigurableProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
-        <arguments>
-            <argument name="prices" xsi:type="array">
-                <item name="cashpresso_price" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\GroupedProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
-        <arguments>
-            <argument name="prices" xsi:type="array">
-                <item name="wishlist_configured_price" xsi:type="string">Magento\GroupedProduct\Pricing\Price\ConfiguredPrice</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
 </config>

@@ -1,9 +1,5 @@
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+/* registered in app/code/Credi2/CashpressoPayments/view/frontend/layout/checkout_index_index.xml */
 
-/* @api */
 define([
     'uiComponent',
     'Magento_Checkout/js/model/payment/renderer-list'
@@ -13,10 +9,17 @@ define([
     rendererList.push(
         {
             type: 'cashpresso',
-            component: 'LimeSoda_Cashpresso/js/view/payment/method-renderer/cashpresso-method'
+            component: 'Credi2_CashpressoPayments/js/view/payment/method/cashpresso'
+        },
+        {
+            type: 'cashpresso_bnpl_installment',
+            component: 'Credi2_CashpressoPayments/js/view/payment/method/bnpl-installment'
+        },
+        {
+            type: 'cashpresso_bnpl_invoice',
+            component: 'Credi2_CashpressoPayments/js/view/payment/method/bnpl-invoice'
         }
     );
 
-    /** Add view logic here if needed */
     return Component.extend({});
 });

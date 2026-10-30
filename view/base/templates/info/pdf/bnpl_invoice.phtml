@@ -1,0 +1,14 @@
+<?php
+/**
+ * @var \Credi2\CashpressoPayments\Block\BnplInvoiceInfo $block
+ */
+$bankData = $block->getBankData();
+?>
+<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>{{pdf_row_separator}}
+<?= $block->escapeHtml(__('Please transfer the invoice amount to the following account:')) ?>{{pdf_row_separator}}
+<?= $block->escapeHtml(__('Account holder')) ?>: <?= $block->escapeHtml($bankData['holder']) ?>{{pdf_row_separator}}
+<?= $block->escapeHtml(__('IBAN')) ?>: <?= $block->escapeHtml($bankData['iban']) ?>{{pdf_row_separator}}
+<?= $block->escapeHtml(__('BIC')) ?>: <?= $block->escapeHtml($bankData['bic']) ?>{{pdf_row_separator}}
+<?php if ($reference = $block->getPaymentReference()): ?>
+<?= $block->escapeHtml(__('Payment reference')) ?>: <?= $block->escapeHtml($reference) ?>
+<?php endif; ?>

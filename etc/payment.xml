@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <groups>
+        <group id="cashpresso">
+            <label>Cashpresso</label>
+        </group>
+    </groups>
+    <methods>
+        <method name="cashpresso">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="cashpresso_bnpl_installment">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+        <method name="cashpresso_bnpl_invoice">
+            <allow_multiple_address>1</allow_multiple_address>
+        </method>
+    </methods>
+</payment>
